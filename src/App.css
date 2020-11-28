@@ -50,11 +50,3 @@
     justify-content: center;
     align-items: center;
 }
-
-.nav {
-    display: block;
-}
-
-.tab-content {
-    position: relative;
-}
