@@ -1,4 +1,4 @@
-import {RunType} from './App';
+import {RunType} from './Input';
 
 export function createSeed(rt: RunType): number {
     // start with a 32 bit number, top bit set
