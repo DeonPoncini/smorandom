@@ -3,8 +3,9 @@ import logo from './logo.svg';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {Button, Jumbotron, Form} from 'react-bootstrap';
+import * as seed from './seed';
 
-enum RunType {
+export enum RunType {
     Unset,
     Any,
     Dark,
@@ -24,9 +25,11 @@ class App extends React.Component<AppProps, AppState> {
 
     constructor(props: AppProps) {
         super(props);
+        let s: number = seed.createSeed(RunType.Unset);
+        let st: string = s.toString(16);
         this.state = {
-            seedText: "",
-            seed: 0,
+            seedText: st,
+            seed: s,
             runtype: RunType.Unset,
             validated: false
         };
@@ -76,17 +79,20 @@ class App extends React.Component<AppProps, AppState> {
 
     handleRunType(event: React.MouseEvent<HTMLInputElement>): void {
         let id: string = event.currentTarget.id;
+        let rt: RunType = RunType.Unset;
         if (id === "runtypeany") {
-            this.setState({runtype: RunType.Any});
+            rt = RunType.Any;
         } else if (id === "runtypedark") {
-            this.setState({runtype: RunType.Dark});
+            rt = RunType.Dark;
         } else if (id === "runtypedarker") {
-            this.setState({runtype: RunType.Darker});
-        } else if (id === "runtypedarker") {
-            this.setState({runtype: RunType.All});
-        } else {
-            this.setState({runtype: RunType.Unset});
+            rt = RunType.Darker;
+        } else if (id === "runtypeall") {
+            rt = RunType.All;
+            console.log("Setting to all");
         }
+        let s:number = seed.updateRunType(rt, this.state.seed);
+        let st: string = s.toString(16);
+        this.setState({seed: s, seedText: st, runtype: rt});
     }
 
     render() {
