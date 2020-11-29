@@ -1,6 +1,7 @@
 import {Kingdoms, KingdomName} from './kingdom';
 import {MoonID, Moons} from './moon';
 import Random from './random';
+import {GenerateOptions, RunType} from './Input';
 
 export class Output {
     kingdoms: Array<[string, Array<[string, number]>]>;
@@ -85,7 +86,6 @@ class State {
             }
         }
         this.kingdoms_to_schedule.push(id);
-        console.log(this.kingdoms_to_schedule);
     }
 
     schedule_kingdom(): boolean {
@@ -99,7 +99,6 @@ class State {
             this.kingdoms_to_schedule.length-1);
         // remove it from the scheduled
         let kts = this.kingdoms_to_schedule[random];
-        console.log("Kingdom to schedule "+kts+" at "+random+" out of "+this.kingdoms_to_schedule.length);
         let id = JSON.parse(JSON.stringify(kts));
         this.kingdoms_to_schedule.splice(random, 1);
         // schedule it
@@ -145,34 +144,40 @@ class State {
         this.kingdoms_completed.add(id);
     }
 
-    next_kingdom(kingdoms: Kingdoms): boolean {
+    next_kingdom(kingdoms: Kingdoms, options: GenerateOptions): boolean {
         // move to the next kingdom
         if (this.completed_main_game) {
             if (!kingdoms.kingdom(this.current_kingdom).can_leave(this)) {
                 // can't leave yet
                 return false;
             }
-            // add every kingdom that isn't this one
-            this.add_kingdom_to_schedule(KingdomName.Cap);
-            this.add_kingdom_to_schedule(KingdomName.Cascade);
-            this.add_kingdom_to_schedule(KingdomName.Sand);
-            this.add_kingdom_to_schedule(KingdomName.Lake);
-            this.add_kingdom_to_schedule(KingdomName.Wooded);
-            this.add_kingdom_to_schedule(KingdomName.Cloud);
-            this.add_kingdom_to_schedule(KingdomName.Lost);
-            this.add_kingdom_to_schedule(KingdomName.Metro);
-            this.add_kingdom_to_schedule(KingdomName.Snow);
-            this.add_kingdom_to_schedule(KingdomName.Seaside);
-            this.add_kingdom_to_schedule(KingdomName.Luncheon);
-            this.add_kingdom_to_schedule(KingdomName.Ruined);
-            this.add_kingdom_to_schedule(KingdomName.Bowser);
-            this.add_kingdom_to_schedule(KingdomName.Moon);
-            this.add_kingdom_to_schedule(KingdomName.Mushroom);
-            if (kingdoms.kingdom(KingdomName.Dark).available(this)) {
+            if (options.runtype === RunType.Dark && this.total_moons >= 250) {
+                console.log("SCHEDULING DARK SIDE");
+                this.kingdoms_to_schedule = [];
                 this.add_kingdom_to_schedule(KingdomName.Dark);
-            }
-            if (kingdoms.kingdom(KingdomName.Darker).available(this)) {
-                this.add_kingdom_to_schedule(KingdomName.Darker);
+            } else {
+                // add every kingdom that isn't this one
+                this.add_kingdom_to_schedule(KingdomName.Cap);
+                this.add_kingdom_to_schedule(KingdomName.Cascade);
+                this.add_kingdom_to_schedule(KingdomName.Sand);
+                this.add_kingdom_to_schedule(KingdomName.Lake);
+                this.add_kingdom_to_schedule(KingdomName.Wooded);
+                this.add_kingdom_to_schedule(KingdomName.Cloud);
+                this.add_kingdom_to_schedule(KingdomName.Lost);
+                this.add_kingdom_to_schedule(KingdomName.Metro);
+                this.add_kingdom_to_schedule(KingdomName.Snow);
+                this.add_kingdom_to_schedule(KingdomName.Seaside);
+                this.add_kingdom_to_schedule(KingdomName.Luncheon);
+                this.add_kingdom_to_schedule(KingdomName.Ruined);
+                this.add_kingdom_to_schedule(KingdomName.Bowser);
+                this.add_kingdom_to_schedule(KingdomName.Moon);
+                this.add_kingdom_to_schedule(KingdomName.Mushroom);
+                if (kingdoms.kingdom(KingdomName.Dark).available(this)) {
+                    this.add_kingdom_to_schedule(KingdomName.Dark);
+                }
+                if (kingdoms.kingdom(KingdomName.Darker).available(this)) {
+                    this.add_kingdom_to_schedule(KingdomName.Darker);
+                }
             }
         } else {
             if (!kingdoms.kingdom(this.current_kingdom).can_leave(this)) {
@@ -201,16 +206,12 @@ class State {
         // randomly pick a moon and schedule it
         let random = this.random.gen_range_int(0, this.moons_to_schedule.length-1);
         let mts = this.moons_to_schedule[random];
-        console.log("Moon to schedule "+moons.moon(mts).name+" at "+random+
-            " out of "+ this.moons_to_schedule.length);
         let id = JSON.parse(JSON.stringify(mts));
         this.moons_to_schedule.splice(random, 1);
         let count = moons.moon(id).count;
         // schedule it
         this.moons_ordered.push(id);
         this.moons_scheduled.add(id);
-        console.log("Total kingdom moons: " +this.total_kingdom_moons);
-        console.log("Total moons: " +this.total_moons);
         this.total_kingdom_moons += count;
         this.total_moons += count;
         return true;

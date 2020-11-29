@@ -49,12 +49,18 @@ export function generate(seed: number, options: GenerateOptions): Output {
             }
         }
         if (scheduled === 0) {
-            state.next_kingdom(kingdoms);
+            state.next_kingdom(kingdoms, options);
             // schedule the next kingdom
             if (!state.schedule_kingdom()) {
                 // no more moons and no more kingdoms, we are done
                 console.log("WE ARE DONE");
                 break;
+            }
+            // end depending on type
+            if (options.runtype === RunType.Dark) {
+                if (state.current_kingdom === KingdomName.Dark) {
+                    break;
+                }
             }
         } else {
             // schedule the moons
@@ -67,15 +73,21 @@ export function generate(seed: number, options: GenerateOptions): Output {
             if (options.runtype === RunType.Any) {
                 chance = -1;
             }
+            // for Dark side, we leave for Dark side if we are done
+            if (options.runtype === RunType.Dark) {
+                chance = -1;
+                if (state.current_kingdom === KingdomName.Dark) {
+                    break;
+                }
+            }
             if (chance < leave_chance) {
                 leave_chance = 1;
                 // leave for the next kingdom
-                if (state.next_kingdom(kingdoms)) {
+                if (state.next_kingdom(kingdoms, options)) {
                     state.schedule_kingdom();
                 }
             } else {
                 leave_chance += 1;
-                console.log("Increasing leave chance to " + leave_chance);
             }
         }
     }
