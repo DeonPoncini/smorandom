@@ -7,19 +7,14 @@
 }
 
 .jumbotron {
-    display: inline-block;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .contents {
     text-align: center;
     margin: auto;
-    width: 100vw;
-    height: 100vh;
-}
-
-.list {
-    margin: auto;
-    text-wrapping: auto;
 }
 
 .entry {
