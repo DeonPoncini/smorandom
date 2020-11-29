@@ -2354,7 +2354,7 @@ export class Moons {
         this.moons[mushroom60].add_prereq_moon(lake33);
         this.moons[mushroom60].add_prereq_moon(cloud2);
         let mushroom61 = this.moons.length;
-        this.moons.push(new Moon("Touring with Princess Peach", KingdomName.Mushroom));
+        this.moons.push(new Moon("Globe-Trotting with Princess Peach", KingdomName.Mushroom));
         this.moons[mushroom61].add_prereq_moon(mushroom60);
         this.moons[mushroom61].add_prereq_moon(lost25);
         this.moons[mushroom61].add_prereq_moon(metro66);
