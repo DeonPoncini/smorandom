@@ -5,7 +5,8 @@ type MoonViewProps = {
     name: string,
     count: number,
     checked: boolean,
-    checkFn: (name: string, check: boolean) => void;
+    index: number,
+    checkFn: (name: string, check: boolean, index: number) => void;
 }
 type MoonViewState = {
 }
@@ -19,7 +20,7 @@ class MoonView extends React.Component<MoonViewProps, MoonViewState> {
 
     handleCheck(event: React.MouseEvent<HTMLInputElement>): void {
         let checked: boolean = event.currentTarget.checked;
-        this.props.checkFn(this.props.name, checked);
+        this.props.checkFn(this.props.name, checked, this.props.index);
     }
 
     render() {

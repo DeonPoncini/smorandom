@@ -1,4 +1,3 @@
-Arrange all div to fit on screen
 Keyboard control (space to mark, arrows for next/previous)
 48 bit seed (more control bits)
 Only use 32 bit seed for RNG

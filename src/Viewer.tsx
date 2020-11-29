@@ -1,7 +1,8 @@
 import React from 'react';
-import {Button, Container, Row, Col} from 'react-bootstrap';
-import {Output} from './state';
+import {Button, Col, Container, Row} from 'react-bootstrap';
 import MoonView from './MoonView';
+import KeyHandler, {KEYPRESS} from 'react-key-handler';
+import {Output} from './state';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './Viewer.css';
 
@@ -30,6 +31,7 @@ type ViewerProps = {
 type ViewerState = {
     current_index: number;
     checks: Map<string, boolean>;
+    moon_check: Map<number, number>;
 }
 
 class Viewer extends React.Component<ViewerProps, ViewerState> {
@@ -38,7 +40,8 @@ class Viewer extends React.Component<ViewerProps, ViewerState> {
         super(props);
         this.state = {
             current_index: 0,
-            checks: new Map()
+            checks: new Map(),
+            moon_check: new Map()
         };
     }
 
@@ -52,10 +55,42 @@ class Viewer extends React.Component<ViewerProps, ViewerState> {
         this.setState({current_index: index});
     }
 
-    onCheck(name: string, check: boolean): void {
+    onCheck(name: string, check: boolean, index: number): void {
         let checks = this.state.checks;
         checks.set(name, check);
-        this.setState({checks: checks});
+        let moon_check = this.state.moon_check;
+        // we are interacting, setup the moon check
+        moon_check.set(this.state.current_index, index);
+        this.setState({checks: checks, moon_check: moon_check});
+    }
+
+    onMarkNext() {
+        let moon_check = this.state.moon_check;
+        let index = moon_check.get(this.state.current_index);
+        if (index === undefined) {
+            index = 0;
+        } else {
+            // increment our index by 1
+            index = index+1;
+        }
+        let moons = this.props.output.kingdoms[this.state.current_index][1];
+        if (index >= moons.length) {
+            return; // no more checks for this page
+        }
+        let name = moons[index][0];
+        this.onCheck(name, true, index);
+    }
+
+    onNext() {
+        if (this.state.current_index !== this.props.output.kingdoms.length-1) {
+            this.next();
+        }
+    }
+
+    onPrev() {
+        if (this.state.current_index !== 0) {
+            this.previous();
+        }
     }
 
     render() {
@@ -94,7 +129,7 @@ class Viewer extends React.Component<ViewerProps, ViewerState> {
             checks.push(
                 <div className="entry" style={location}>
                <MoonView name={moons[x][0]} count={moons[x][1]}
-                    checked={c} checkFn={this.onCheck.bind(this)}/>
+                    checked={c} index={x} checkFn={this.onCheck.bind(this)}/>
                 </div>
             );
             row++;
@@ -108,6 +143,11 @@ class Viewer extends React.Component<ViewerProps, ViewerState> {
                 <Container>
                     <Row>
                     <Col sm={2}>
+                        <KeyHandler
+                            keyEventName={KEYPRESS}
+                            keyValue="a"
+                            onKeyHandle={this.onPrev.bind(this)}>
+                        </KeyHandler>
                         <Button type="primary" disabled={prev_disabled}
                             onClick={this.previous.bind(this)}>
                             Previous
@@ -122,6 +162,11 @@ class Viewer extends React.Component<ViewerProps, ViewerState> {
                         </div>
                     </Col>
                     <Col sm={2}>
+                        <KeyHandler
+                            keyEventName={KEYPRESS}
+                            keyValue="d"
+                            onKeyHandle={this.onNext.bind(this)}>
+                        </KeyHandler>
                         <Button type="primary" disabled={next_disabled}
                             onClick={this.next.bind(this)}>
                             Next
@@ -129,6 +174,11 @@ class Viewer extends React.Component<ViewerProps, ViewerState> {
                     </Col>
                     </Row>
                 </Container>
+                <KeyHandler
+                    keyEventName={KEYPRESS}
+                    code="Space"
+                    onKeyHandle={this.onMarkNext.bind(this)}>
+                </KeyHandler>
                 <div className="contents">
                     {checks}
                 </div>
