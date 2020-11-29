@@ -28,7 +28,7 @@ import wooded from './images/wooded.jpg';
 type ViewerProps = {
     output: Output
     exitFn: () => void;
-    seed: number;
+    seed: string;
 }
 type ViewerState = {
     current_index: number;
@@ -133,7 +133,7 @@ class Viewer extends React.Component<ViewerProps, ViewerState> {
                 gridColumn: col,
             };
             checks.push(
-                <div className="entry" style={location}>
+                <div className="entry" style={location} key={x}>
                <MoonView name={moons[x][0]} count={moons[x][1]}
                     checked={c} index={x} checkFn={this.onCheck.bind(this)}/>
                 </div>
@@ -148,13 +148,13 @@ class Viewer extends React.Component<ViewerProps, ViewerState> {
             <div className="slide" style={bgimage}>
                 <Container>
                     <Row>
-                    <Col sm={2}>
+                    <Col sm={3}>
                         <Button type="primary"
                             onClick={this.exit.bind(this)}>
                             Exit
                         </Button>
                     </Col>
-                    <Col sm={2}>
+                    <Col sm={1}>
                         <KeyHandler
                             keyEventName={KEYPRESS}
                             keyValue="a"
@@ -165,15 +165,9 @@ class Viewer extends React.Component<ViewerProps, ViewerState> {
                             Previous
                         </Button>
                     </Col>
-                    <Col>
-                        <div className="heading">
-                        <h1>
-                            {this.props.output.kingdoms[
-                                this.state.current_index][0]}
-                        </h1>
-                        </div>
+                    <Col sm={4}>
                     </Col>
-                    <Col sm={2}>
+                    <Col sm={1}>
                         <KeyHandler
                             keyEventName={KEYPRESS}
                             keyValue="d"
@@ -184,9 +178,19 @@ class Viewer extends React.Component<ViewerProps, ViewerState> {
                             Next
                         </Button>
                     </Col>
-                    <Col sm={2}>
-                        <h3 className="entry"># {this.props.seed.toString(16)}</h3>
+                    <Col sm={3}>
+                        <h3 className="entry">#{this.props.seed}</h3>
                     </Col>
+                    </Row>
+                    <Row>
+                        <Col>
+                            <div className="heading">
+                            <h1>
+                                {this.props.output.kingdoms[
+                                    this.state.current_index][0]}
+                            </h1>
+                            </div>
+                        </Col>
                     </Row>
                 </Container>
                 <KeyHandler

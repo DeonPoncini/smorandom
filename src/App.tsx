@@ -7,7 +7,7 @@ type AppProps = {};
 type AppState = {
     executed: boolean,
     output: Output,
-    seed: number
+    seed: string
 };
 
 class App extends React.Component<AppProps, AppState> {
@@ -16,11 +16,11 @@ class App extends React.Component<AppProps, AppState> {
         this.state = {
             executed: false,
             output: new Output(),
-            seed: 0
+            seed: ""
         };
     }
 
-    onExecute(execute: boolean, output: Output, seed: number): void {
+    onExecute(execute: boolean, output: Output, seed: string): void {
         this.setState({executed: execute, output: output, seed: seed});
     }
 

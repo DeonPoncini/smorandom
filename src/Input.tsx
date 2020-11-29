@@ -14,11 +14,10 @@ export enum RunType {
 }
 
 type InputProps = {
-    executeFn: (execute: boolean, output: Output, seed: number) => void;
+    executeFn: (execute: boolean, output: Output, seed: string) => void;
 };
 type InputState = {
-    seedText: string,
-    seed: number,
+    seed: [number,  number],
     runtype: RunType,
     validated: boolean
 };
@@ -27,10 +26,8 @@ class Input extends React.Component<InputProps, InputState> {
 
     constructor(props: InputProps) {
         super(props);
-        let s: number = seed.createSeed(RunType.Unset);
-        let st: string = s.toString(16);
+        let s: [number, number] = seed.createSeed(RunType.Unset);
         this.state = {
-            seedText: st,
             seed: s,
             runtype: RunType.Unset,
             validated: false
@@ -42,10 +39,10 @@ class Input extends React.Component<InputProps, InputState> {
     }
 
     checkSeed(): boolean {
-        if (isNaN(this.state.seed)) {
+        if (isNaN(this.state.seed[0])) {
             return false;
         }
-        if (this.state.seed === 0) {
+        if (this.state.seed[0] === 0) {
             return false;
         }
         return true;
@@ -66,17 +63,16 @@ class Input extends React.Component<InputProps, InputState> {
         } else {
             this.setState({validated: true});
             // generate the output
-            let output = generate.generate(this.state.seed);
+            let output = generate.generate(this.state.seed[1]);
             console.log(output);
-            this.props.executeFn(true, output, this.state.seed);
+            this.props.executeFn(true, output, seed.seedToString(this.state.seed));
             // move to actually running
         }
     }
 
     handleSeedChange(event: ChangeEvent<HTMLInputElement>): void {
-        let s: number = parseInt(event.currentTarget.value, 16);
-        let st: string = event.currentTarget.value;
-        this.setState({seed: s, seedText: st});
+        let s: [number, number] = seed.seedFromString(event.currentTarget.value);
+        this.setState({seed: s});
     }
 
     handleRunType(event: React.MouseEvent<HTMLInputElement>): void {
@@ -91,9 +87,8 @@ class Input extends React.Component<InputProps, InputState> {
         } else if (id === "runtypeall") {
             rt = RunType.All;
         }
-        let s:number = seed.updateRunType(rt, this.state.seed);
-        let st: string = s.toString(16);
-        this.setState({seed: s, seedText: st, runtype: rt});
+        let s:number = seed.updateRunType(rt, this.state.seed[0]);
+        this.setState({seed: [s, this.state.seed[1]], runtype: rt});
     }
 
     render() {
@@ -105,7 +100,7 @@ class Input extends React.Component<InputProps, InputState> {
                     <Form.Control
                             required
                             type="text"
-                            value={this.state.seedText}
+                            value={seed.seedToString(this.state.seed)}
                             onChange={this.handleSeedChange.bind(this)}
                             placeholder="Seed"
                             isValid={this.checkSeed()}>
