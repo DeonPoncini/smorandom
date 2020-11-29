@@ -1,4 +1,3 @@
-Display seed on each page
 48 bit seed (more control bits)
 Only use 32 bit seed for RNG
 Update seed display for entering or covering

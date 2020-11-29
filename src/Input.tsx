@@ -14,7 +14,7 @@ export enum RunType {
 }
 
 type InputProps = {
-    executeFn: (execute: boolean, output: Output) => void;
+    executeFn: (execute: boolean, output: Output, seed: number) => void;
 };
 type InputState = {
     seedText: string,
@@ -68,7 +68,8 @@ class Input extends React.Component<InputProps, InputState> {
             // generate the output
             let output = generate.generate(this.state.seed);
             console.log(output);
-            this.props.executeFn(true, output); // move to actually running
+            this.props.executeFn(true, output, this.state.seed);
+            // move to actually running
         }
     }
 

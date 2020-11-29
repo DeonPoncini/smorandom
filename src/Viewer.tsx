@@ -27,7 +27,8 @@ import wooded from './images/wooded.jpg';
 
 type ViewerProps = {
     output: Output
-    executeFn: (execute: boolean, output: Output) => void;
+    exitFn: () => void;
+    seed: number;
 }
 type ViewerState = {
     current_index: number;
@@ -57,7 +58,7 @@ class Viewer extends React.Component<ViewerProps, ViewerState> {
     }
 
     exit() {
-        this.props.executeFn(false, this.props.output);
+        this.props.exitFn();
     }
 
     onCheck(name: string, check: boolean, index: number): void {
@@ -148,15 +149,17 @@ class Viewer extends React.Component<ViewerProps, ViewerState> {
                 <Container>
                     <Row>
                     <Col sm={2}>
+                        <Button type="primary"
+                            onClick={this.exit.bind(this)}>
+                            Exit
+                        </Button>
+                    </Col>
+                    <Col sm={2}>
                         <KeyHandler
                             keyEventName={KEYPRESS}
                             keyValue="a"
                             onKeyHandle={this.onPrev.bind(this)}>
                         </KeyHandler>
-                        <Button type="primary"
-                            onClick={this.exit.bind(this)}>
-                            Exit
-                        </Button>
                         <Button type="primary" disabled={prev_disabled}
                             onClick={this.previous.bind(this)}>
                             Previous
@@ -180,6 +183,9 @@ class Viewer extends React.Component<ViewerProps, ViewerState> {
                             onClick={this.next.bind(this)}>
                             Next
                         </Button>
+                    </Col>
+                    <Col sm={2}>
+                        <h3 className="entry"># {this.props.seed.toString(16)}</h3>
                     </Col>
                     </Row>
                 </Container>

@@ -6,7 +6,8 @@ import {Output} from './state';
 type AppProps = {};
 type AppState = {
     executed: boolean,
-    output: Output
+    output: Output,
+    seed: number
 };
 
 class App extends React.Component<AppProps, AppState> {
@@ -14,12 +15,17 @@ class App extends React.Component<AppProps, AppState> {
         super(props);
         this.state = {
             executed: false,
-            output: new Output()
+            output: new Output(),
+            seed: 0
         };
     }
 
-    onExecute(execute: boolean, output: Output): void {
-        this.setState({executed: execute, output: output});
+    onExecute(execute: boolean, output: Output, seed: number): void {
+        this.setState({executed: execute, output: output, seed: seed});
+    }
+
+    onExit(): void {
+        this.setState({executed: false});
     }
 
 
@@ -30,7 +36,7 @@ class App extends React.Component<AppProps, AppState> {
         } else {
             return(
                 <Viewer output={this.state.output}
-                    executeFn={this.onExecute.bind(this)}/>
+                    exitFn={this.onExit.bind(this)} seed={this.state.seed}/>
             );
         }
     }
