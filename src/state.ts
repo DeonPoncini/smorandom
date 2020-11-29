@@ -155,6 +155,11 @@ class State {
                 console.log("SCHEDULING DARK SIDE");
                 this.kingdoms_to_schedule = [];
                 this.add_kingdom_to_schedule(KingdomName.Dark);
+            } else if (options.runtype === RunType.Darker &&
+                    this.total_moons >= 500) {
+                console.log("SCHEDULING DARKER SIDE");
+                this.kingdoms_to_schedule = [];
+                this.add_kingdom_to_schedule(KingdomName.Darker);
             } else {
                 // add every kingdom that isn't this one
                 this.add_kingdom_to_schedule(KingdomName.Cap);

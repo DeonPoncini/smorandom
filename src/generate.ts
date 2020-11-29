@@ -62,6 +62,11 @@ export function generate(seed: number, options: GenerateOptions): Output {
                     break;
                 }
             }
+            if (options.runtype === RunType.Darker) {
+                if (state.current_kingdom === KingdomName.Darker) {
+                    break;
+                }
+            }
         } else {
             // schedule the moons
             for (let x = 0; x < scheduled; x++) {
@@ -77,6 +82,13 @@ export function generate(seed: number, options: GenerateOptions): Output {
             if (options.runtype === RunType.Dark) {
                 chance = -1;
                 if (state.current_kingdom === KingdomName.Dark) {
+                    break;
+                }
+            }
+            // for Darker side, we leave for Darker side if we are done
+            if (options.runtype === RunType.Darker) {
+                chance = -1;
+                if (state.current_kingdom === KingdomName.Darker) {
                     break;
                 }
             }
