@@ -1,0 +1,27 @@
+.slide {
+    background-image: url("images/smohero.jpg");
+    width: 100vw;
+    height: 100vh;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.jumbotron {
+    display: inline-block;
+}
+
+.contents {
+    text-align: center;
+    margin: auto;
+}
+
+.list {
+    margin: auto;
+    text-wrapping: auto;
+}
+
+.entry {
+    display: inline-block;
+    background-color: white;
+}
