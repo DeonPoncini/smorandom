@@ -1,6 +1,7 @@
 import React from 'react';
-import {Button, Container, Row, Col, Jumbotron} from 'react-bootstrap';
+import {Button, Container, Row, Col} from 'react-bootstrap';
 import {Output} from './state';
+import MoonView from './MoonView';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './Viewer.css';
 
@@ -28,6 +29,7 @@ type ViewerProps = {
 }
 type ViewerState = {
     current_index: number;
+    checks: Map<string, boolean>;
 }
 
 class Viewer extends React.Component<ViewerProps, ViewerState> {
@@ -35,7 +37,8 @@ class Viewer extends React.Component<ViewerProps, ViewerState> {
     constructor(props: ViewerProps) {
         super(props);
         this.state = {
-            current_index: 0
+            current_index: 0,
+            checks: new Map()
         };
     }
 
@@ -47,6 +50,12 @@ class Viewer extends React.Component<ViewerProps, ViewerState> {
     next() {
         let index = this.state.current_index + 1;
         this.setState({current_index: index});
+    }
+
+    onCheck(name: string, check: boolean): void {
+        let checks = this.state.checks;
+        checks.set(name, check);
+        this.setState({checks: checks});
     }
 
     render() {
@@ -68,6 +77,18 @@ class Viewer extends React.Component<ViewerProps, ViewerState> {
             backgroundRepeat: "no-repeat",
             backgroundSize: "cover"
         };
+        let moons = this.props.output.kingdoms[this.state.current_index][1];
+        let checks = []
+        for (let x = 0; x < moons.length; x++) {
+            let c = this.state.checks.get(moons[x][0]);
+            if (c === undefined) {
+                c = false;
+            }
+            checks.push(
+               <MoonView name={moons[x][0]} count={moons[x][1]}
+                    checked={c} checkFn={this.onCheck.bind(this)}/>
+            );
+        }
         return(
             <div className="slide" style={bgimage}>
                 <Container>
@@ -79,12 +100,12 @@ class Viewer extends React.Component<ViewerProps, ViewerState> {
                         </Button>
                     </Col>
                     <Col>
-                        <Jumbotron>
+                        <div className="heading">
                         <h1>
                             {this.props.output.kingdoms[
                                 this.state.current_index][0]}
                         </h1>
-                        </Jumbotron>
+                        </div>
                     </Col>
                     <Col sm={2}>
                         <Button type="primary" disabled={next_disabled}
@@ -93,22 +114,9 @@ class Viewer extends React.Component<ViewerProps, ViewerState> {
                         </Button>
                     </Col>
                     </Row>
-                    <Row>
-                    <div className="contents">
-                        <div>
-                           {this.props.output.kingdoms[
-                               this.state.current_index][1]
-                                   .map((moon) => (
-                               <div>
-                               <div className="entry">
-                                   {moon[0]}
-                               </div>
-                               <br />
-                               </div>
-                           ))}
-                        </div>
-                    </div>
-                    </Row>
+                       <Row>
+                        {checks}
+                       </Row>
                 </Container>
             </div>
         );
