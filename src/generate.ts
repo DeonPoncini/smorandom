@@ -2,28 +2,23 @@ import Random from './random';
 import State, {Output} from './state';
 import {Kingdoms, KingdomName} from './kingdom';
 import {Moons, MoonID} from './moon';
+import {GenerateOptions} from './Input';
 
-export function generate(seed: number): Output {
+export function generate(seed: number, options: GenerateOptions): Output {
     let random = new Random(seed);
     let state = new State(random);
     let kingdoms = new Kingdoms();
-    let moons = new Moons(kingdoms);
+    let moons = new Moons(kingdoms, options);
     let leave_chance = 1;
 
     // start up the first kingdom
-    console.log(state);
     state.add_kingdom_to_schedule(KingdomName.Cap);
-    console.log(state);
     state.schedule_kingdom();
-    console.log(state);
 
     while(1) {
         // first, find all moons that can be scheduled
-        console.log(state);
         let available: Array<MoonID> = moons.return_available(state);
-        console.log("Moons available: " + available.length);
         for (let a of available) {
-            console.log("Adding "+moons.moon(a).name+" to schedule");
             state.add_moon_to_schedule(a);
         }
         // schedule a random count trying to be enough to leave
@@ -34,7 +29,6 @@ export function generate(seed: number): Output {
             ec = kingdoms.kingdom(state.current_kingdom).moons_to_leave;
         }
         let scheduleable = state.moons_to_schedule.length;
-        console.log("Scheduleable: " + scheduleable + " exit: " + ec);
         let exit_count = Math.min(ec, scheduleable);
         let scheduled = 0;
         if (exit_count === scheduleable) {
@@ -42,9 +36,7 @@ export function generate(seed: number): Output {
         } else {
             scheduled = random.gen_range_int(exit_count, scheduleable-1);
         }
-        console.log("Scheduling "+scheduled+" moons");
         if (scheduled === 0) {
-            console.log("leaving for the next kingdom");
             state.next_kingdom(kingdoms);
             // schedule the next kingdom
             if (!state.schedule_kingdom()) {

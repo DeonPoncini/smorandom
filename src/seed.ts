@@ -30,6 +30,15 @@ export function updateRunType(rt: RunType, r: number): number {
     return r;
 }
 
+export function updateWorldPeace(wp: boolean, r: number): number {
+    // zero out the world peace bits
+    r = r & 0xF7FFFFFF;
+    if (wp) {
+        r = r | 0x08000000;
+    }
+    return r;
+}
+
 export function seedToString(s: [number, number]): string {
     return s[0].toString(16) + s[1].toString(16);
 }

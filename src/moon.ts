@@ -1,5 +1,6 @@
 import {Kingdoms, KingdomName} from './kingdom';
 import State from './state';
+import {GenerateOptions} from './Input';
 
 export type MoonID = number;
 
@@ -108,7 +109,7 @@ export class Moons {
         return ret;
     }
 
-    constructor(kingdoms: Kingdoms) {
+    constructor(kingdoms: Kingdoms, options: GenerateOptions) {
         this.moons = [];
         this.offset = [];
 
@@ -215,7 +216,9 @@ export class Moons {
         let cascade2 = this.moons.length;
         this.moons.push(new Moon("Multi Moon Atop the Falls", KingdomName.Cascade, true));
         this.moons[cascade2].add_prereq_moon(cascade1);
-        kingdoms.kingdom(KingdomName.Cascade).set_exit_moon(cascade2);
+        if (options.worldpeace) {
+            kingdoms.kingdom(KingdomName.Cascade).set_exit_moon(cascade2);
+        }
         let cascade3 = this.moons.length;
         this.moons.push(new Moon("Chomp Through the Rocks", KingdomName.Cascade));
         this.moons[cascade3].add_prereq_moon(cascade1);
@@ -349,7 +352,9 @@ export class Moons {
         let sand4 = this.moons.length;
         this.moons.push(new Moon("The Hole in the Desert", KingdomName.Sand, true));
         this.moons[sand4].add_prereq_moon(sand3);
-        kingdoms.kingdom(KingdomName.Sand).set_exit_moon(sand4);
+        if (options.worldpeace) {
+            kingdoms.kingdom(KingdomName.Sand).set_exit_moon(sand4);
+        }
         this.moons.push(new Moon("Overlooking the Desert Town", KingdomName.Sand));
         this.moons.push(new Moon("Alcove in the Ruins", KingdomName.Sand));
         this.moons.push(new Moon("On the Leaning Pillar", KingdomName.Sand));
@@ -563,7 +568,9 @@ export class Moons {
         // lake kingdom
         let lake1 = this.moons.length;
         this.moons.push(new Moon("Broodals Over the Lake", KingdomName.Lake, true));
-        kingdoms.kingdom(KingdomName.Lake).set_exit_moon(lake1);
+        if (options.worldpeace) {
+            kingdoms.kingdom(KingdomName.Lake).set_exit_moon(lake1);
+        }
         this.moons.push(new Moon("Dorrie-Back Rider", KingdomName.Lake));
         this.moons.push(new Moon("Cheep Cheep Crossing", KingdomName.Lake));
         this.moons.push(new Moon("End of the Hidden Passage", KingdomName.Lake));
@@ -678,7 +685,9 @@ export class Moons {
         let wooded4 = this.moons.length;
         this.moons.push(new Moon("Defend the Secret Flower Field!", KingdomName.Wooded, true));
         this.moons[wooded4].add_prereq_moon(wooded3);
-        kingdoms.kingdom(KingdomName.Wooded).set_exit_moon(wooded4);
+        if (options.worldpeace) {
+            kingdoms.kingdom(KingdomName.Wooded).set_exit_moon(wooded4);
+        }
         let wooded5 = this.moons.length;
         this.moons.push(new Moon("Behind the Rock Wall", KingdomName.Wooded));
         this.moons[wooded5].add_prereq_moon(wooded2);
@@ -1000,7 +1009,9 @@ export class Moons {
         this.moons[metro6].add_prereq_moon(metro5);
         let metro7 = this.moons.length;
         this.moons.push(new Moon("A Traditional Festival", KingdomName.Metro, true));
-        kingdoms.kingdom(KingdomName.Metro).set_exit_moon(metro7);
+        if (options.worldpeace) {
+            kingdoms.kingdom(KingdomName.Metro).set_exit_moon(metro7);
+        }
         this.moons[metro7].add_prereq_moon(metro6);
         this.moons.push(new Moon("Inside an Iron Girder", KingdomName.Metro));
         this.moons.push(new Moon("Swaying in the Breeze", KingdomName.Metro));
@@ -1247,7 +1258,9 @@ export class Moons {
         this.moons[snow5].add_prereq_moon(snow2);
         this.moons[snow5].add_prereq_moon(snow3);
         this.moons[snow5].add_prereq_moon(snow4);
-        kingdoms.kingdom(KingdomName.Snow).set_exit_moon(snow5);
+        if (options.worldpeace) {
+            kingdoms.kingdom(KingdomName.Snow).set_exit_moon(snow5);
+        }
         this.moons[cascade18].add_prereq_moon(snow5);
         this.moons[lake26].add_prereq_moon(snow5);
         this.moons[wooded49].add_prereq_moon(snow5);
@@ -1406,7 +1419,9 @@ export class Moons {
         this.moons[seaside5].add_prereq_moon(seaside2);
         this.moons[seaside5].add_prereq_moon(seaside3);
         this.moons[seaside5].add_prereq_moon(seaside4);
-        kingdoms.kingdom(KingdomName.Seaside).set_exit_moon(seaside5);
+        if (options.worldpeace) {
+            kingdoms.kingdom(KingdomName.Seaside).set_exit_moon(seaside5);
+        }
         this.moons[cascade18].add_prereq_moon(seaside5);
         this.moons[lake26].add_prereq_moon(seaside5);
         this.moons[wooded49].add_prereq_moon(seaside5);
@@ -1575,7 +1590,9 @@ export class Moons {
         let luncheon5 = this.moons.length;
         this.moons.push(new Moon("Cookatiel Showdown!", KingdomName.Luncheon, true));
         this.moons[luncheon5].add_prereq_moon(luncheon4);
-        kingdoms.kingdom(KingdomName.Luncheon).set_exit_moon(luncheon5);
+        if (options.worldpeace) {
+            kingdoms.kingdom(KingdomName.Luncheon).set_exit_moon(luncheon5);
+        }
         this.moons.push(new Moon("Piled on the Salt", KingdomName.Luncheon));
         this.moons.push(new Moon("Lurking in the Pillar's Shadow", KingdomName.Luncheon));
         let luncheon8 = this.moons.length;
@@ -1771,7 +1788,9 @@ export class Moons {
         // ruined kingdom
         let ruined1 = this.moons.length;
         this.moons.push(new Moon("Battle with the Lord of Lightning!", KingdomName.Ruined, true));
-        kingdoms.kingdom(KingdomName.Ruined).set_exit_moon(ruined1);
+        if (options.worldpeace) {
+            kingdoms.kingdom(KingdomName.Ruined).set_exit_moon(ruined1);
+        }
         let ruined2 = this.moons.length;
         this.moons.push(new Moon("In the Ancient Treasure Chest", KingdomName.Ruined));
         let ruined3 = this.moons.length;

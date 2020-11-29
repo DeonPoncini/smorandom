@@ -13,12 +13,22 @@ export enum RunType {
     All
 }
 
+export class GenerateOptions {
+    runtype: RunType;
+    worldpeace: boolean;
+
+    constructor() {
+        this.runtype = RunType.Unset;
+        this.worldpeace = false;
+    }
+}
+
 type InputProps = {
     executeFn: (execute: boolean, output: Output, seed: string) => void;
 };
 type InputState = {
     seed: [number,  number],
-    runtype: RunType,
+    options: GenerateOptions,
     validated: boolean
 };
 
@@ -29,7 +39,7 @@ class Input extends React.Component<InputProps, InputState> {
         let s: [number, number] = seed.createSeed(RunType.Unset);
         this.state = {
             seed: s,
-            runtype: RunType.Unset,
+            options: new GenerateOptions(),
             validated: false
         };
     }
@@ -49,7 +59,7 @@ class Input extends React.Component<InputProps, InputState> {
     }
 
     checkRun(): boolean {
-        if (this.state.runtype === RunType.Unset) {
+        if (this.state.options.runtype === RunType.Unset) {
             return false;
         }
         return true;
@@ -63,7 +73,7 @@ class Input extends React.Component<InputProps, InputState> {
         } else {
             this.setState({validated: true});
             // generate the output
-            let output = generate.generate(this.state.seed[1]);
+            let output = generate.generate(this.state.seed[1], this.state.options);
             console.log(output);
             this.props.executeFn(true, output, seed.seedToString(this.state.seed));
             // move to actually running
@@ -88,14 +98,24 @@ class Input extends React.Component<InputProps, InputState> {
             rt = RunType.All;
         }
         let s:number = seed.updateRunType(rt, this.state.seed[0]);
-        this.setState({seed: [s, this.state.seed[1]], runtype: rt});
+        let options = this.state.options;
+        options.runtype = rt;
+        this.setState({seed: [s, this.state.seed[1]], options: options});
+    }
+
+    handleWorldPeace(event: React.MouseEvent<HTMLInputElement>): void {
+        let checked: boolean = event.currentTarget.checked;
+        let options = this.state.options;
+        options.worldpeace = checked;
+        let s:number = seed.updateWorldPeace(checked, this.state.seed[0]);
+        this.setState({seed: [s, this.state.seed[1]], options: options});
     }
 
     render() {
         return(
             <div className="bgimage">
                 <Jumbotron>
-                <Form noValidate validated={this.state.validated}>
+                <div><h2>Randomizer</h2></div>
                 <Form.Group controlId="seed">
                     <Form.Control
                             required
@@ -105,9 +125,6 @@ class Input extends React.Component<InputProps, InputState> {
                             placeholder="Seed"
                             isValid={this.checkSeed()}>
                     </Form.Control>
-                    <Form.Control.Feedback type="invalid">
-                        Invalid seed
-                    </Form.Control.Feedback>
                 </Form.Group>
                 <Form.Group controlId="run">
                     <Form.Check inline type="radio" label="Any %"
@@ -123,10 +140,14 @@ class Input extends React.Component<InputProps, InputState> {
                         name="runtype" id="runtypeall"
                         onClick={this.handleRunType.bind(this)}/>
                 </Form.Group>
+                <Form.Group>
+                    <Form.Check inline type="switch" label="World Peace"
+                        name="worldpeace" id="worldpeace"
+                        onChange={this.handleWorldPeace.bind(this)}/>
+                </Form.Group>
                 <Button variant="primary" onClick={this.handleSubmit.bind(this)}>
                     Generate
                 </Button>
-                </Form>
                 </Jumbotron>
             </div>
         );

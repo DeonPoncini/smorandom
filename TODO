@@ -1,10 +1,9 @@
-48 bit seed (more control bits)
-Only use 32 bit seed for RNG
-Update seed display for entering or covering
 Add world peace option: put the add_exit_moon behind a boolean
+Revisting kingdoms add a counter
 Any% run, set leave chance to full at minimum kingdom moons
 Dark side at 250 schedule dark side and terminate
 Darker side at 500 schedule darker side and terminate
+Update seed display to allow for seed input and not editable
 Create production build
 Hosting
 
