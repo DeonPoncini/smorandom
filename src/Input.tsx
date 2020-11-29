@@ -3,6 +3,7 @@ import './Input.css';
 import {Button, Jumbotron, Form} from 'react-bootstrap';
 import * as seed from './seed';
 import * as generate from './generate';
+import {Output} from './state';
 
 export enum RunType {
     Unset,
@@ -13,7 +14,7 @@ export enum RunType {
 }
 
 type InputProps = {
-    executeFn: (execute: boolean) => void;
+    executeFn: (execute: boolean, output: Output) => void;
 };
 type InputState = {
     seedText: string,
@@ -67,7 +68,7 @@ class Input extends React.Component<InputProps, InputState> {
             // generate the output
             let output = generate.generate(this.state.seed);
             console.log(output);
-            this.props.executeFn(true); // move to actually running
+            this.props.executeFn(true, output); // move to actually running
         }
     }
 

@@ -1,21 +1,25 @@
 import React from 'react';
 import Input from './Input';
+import Viewer from './Viewer';
+import {Output} from './state';
 
 type AppProps = {};
 type AppState = {
-    executed: boolean
+    executed: boolean,
+    output: Output
 };
 
 class App extends React.Component<AppProps, AppState> {
     constructor(props: AppProps) {
         super(props);
         this.state = {
-            executed: false
+            executed: false,
+            output: new Output()
         };
     }
 
-    onExecute(execute: boolean): void {
-        this.setState({executed: execute});
+    onExecute(execute: boolean, output: Output): void {
+        this.setState({executed: execute, output: output});
     }
 
 
@@ -24,7 +28,9 @@ class App extends React.Component<AppProps, AppState> {
             return(
                 <Input executeFn={this.onExecute.bind(this)} />);
         } else {
-            return(<div>READY TO GO</div>);
+            return(
+                <Viewer output={this.state.output} />
+            );
         }
     }
 }
