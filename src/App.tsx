@@ -1,4 +1,4 @@
-import React, { FormEvent, ChangeEvent } from 'react';
+import React from 'react';
 import Input from './Input';
 
 type AppProps = {};

@@ -1,7 +1,8 @@
-import React, { FormEvent, ChangeEvent } from 'react';
+import React, { ChangeEvent } from 'react';
 import './Input.css';
 import {Button, Jumbotron, Form} from 'react-bootstrap';
 import * as seed from './seed';
+import * as generate from './generate';
 
 export enum RunType {
     Unset,
@@ -40,16 +41,12 @@ class Input extends React.Component<InputProps, InputState> {
     }
 
     checkSeed(): boolean {
-        console.log("Checking seed " + this.state.seed);
         if (isNaN(this.state.seed)) {
-            console.log("false seed");
             return false;
         }
         if (this.state.seed === 0) {
-            console.log("false seed 0");
             return false;
         }
-        console.log("Its fine " + this.state.seed);
         return true;
     }
 
@@ -67,6 +64,9 @@ class Input extends React.Component<InputProps, InputState> {
             this.setState({validated: false});
         } else {
             this.setState({validated: true});
+            // generate the output
+            let output = generate.generate(this.state.seed);
+            console.log(output);
             this.props.executeFn(true); // move to actually running
         }
     }
@@ -88,7 +88,6 @@ class Input extends React.Component<InputProps, InputState> {
             rt = RunType.Darker;
         } else if (id === "runtypeall") {
             rt = RunType.All;
-            console.log("Setting to all");
         }
         let s:number = seed.updateRunType(rt, this.state.seed);
         let st: string = s.toString(16);
@@ -130,7 +129,6 @@ class Input extends React.Component<InputProps, InputState> {
                 <Button variant="primary" onClick={this.handleSubmit.bind(this)}>
                     Generate
                 </Button>
-                {!this.state.validated && <div>Invalid input</div>}
                 </Form>
                 </Jumbotron>
             </div>
