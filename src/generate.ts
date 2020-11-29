@@ -10,16 +10,14 @@ export function generate(seed: number, options: GenerateOptions): Output {
     let kingdoms = new Kingdoms();
     let moons = new Moons(kingdoms, options);
     let leave_chance = 1;
+    let darkleave = false;
+    let anykeepgoing = false;
 
     // start up the first kingdom
     state.add_kingdom_to_schedule(KingdomName.Cap);
     state.schedule_kingdom();
 
     while(1) {
-        // check for Any% completion
-        if (options.runtype === RunType.Any && state.completed_main_game) {
-            break;
-        }
         // first, find all moons that can be scheduled
         let available: Array<MoonID> = moons.return_available(state);
         for (let a of available) {
@@ -41,15 +39,24 @@ export function generate(seed: number, options: GenerateOptions): Output {
             scheduled = random.gen_range_int(exit_count, scheduleable-1);
         }
         // for Any% leave after the number of scheduled moons exactly
-        if (options.runtype === RunType.Any && !options.worldpeace) {
+        if (options.runtype === RunType.Any && !options.worldpeace &&
+                !anykeepgoing) {
             let tkm = state.total_kingdom_moons;
             let kt = kingdoms.kingdom(state.current_kingdom).moons_to_leave;
             if (tkm + scheduled > kt) {
                 scheduled = kt - tkm;
+                console.log("UPDATED SCHEDULED: " + scheduled);
+                console.log("tkm: " + tkm + " kt: " + kt);
             }
         }
         if (scheduled === 0) {
-            state.next_kingdom(kingdoms, options);
+            if (!state.next_kingdom(kingdoms, options)) {
+                // we need to keep going
+                if (options.runtype === RunType.Any) {
+                    anykeepgoing = true;
+                    continue;
+                }
+            }
             // schedule the next kingdom
             if (!state.schedule_kingdom()) {
                 // no more moons and no more kingdoms, we are done
@@ -57,6 +64,11 @@ export function generate(seed: number, options: GenerateOptions): Output {
                 break;
             }
             // end depending on type
+            if (options.runtype === RunType.Any) {
+                if (state.current_kingdom === KingdomName.Moon) {
+                    break;
+                }
+            }
             if (options.runtype === RunType.Dark) {
                 if (state.current_kingdom === KingdomName.Dark) {
                     break;
@@ -78,11 +90,20 @@ export function generate(seed: number, options: GenerateOptions): Output {
             if (options.runtype === RunType.Any) {
                 chance = -1;
             }
+            if (options.runtype === RunType.Any) {
+                if (state.current_kingdom === KingdomName.Moon) {
+                    break;
+                }
+            }
             // for Dark side, we leave for Dark side if we are done
             if (options.runtype === RunType.Dark) {
-                chance = -1;
+                // we need to schedule two moons before quitting
                 if (state.current_kingdom === KingdomName.Dark) {
-                    break;
+                    if (darkleave) {
+                        break;
+                    } else {
+                        darkleave = true;
+                    }
                 }
             }
             // for Darker side, we leave for Darker side if we are done

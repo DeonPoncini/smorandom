@@ -91,6 +91,7 @@ class State {
     schedule_kingdom(): boolean {
         // if there are no kingdoms to schedule, return false
         if (this.kingdoms_to_schedule.length === 0) {
+            console.log("No more kingdoms to schedule");
             return false;
         }
 
@@ -185,13 +186,19 @@ class State {
                 }
             }
         } else {
+            console.log("scheduling");
             if (!kingdoms.kingdom(this.current_kingdom).can_leave(this)) {
                 // can't leave yet
+                console.log("Cannot leave yet");
                 return false;
             }
+            console.log("Next kingdoms " + kingdoms.kingdom(this.current_kingdom).next_kingdoms);
             for (let k of kingdoms.kingdom(this.current_kingdom).next_kingdoms) {
                 if (kingdoms.kingdom(k).available(this)) {
+                    console.log("Adding " + kingdoms.kingdom(k).name);
                     this.add_kingdom_to_schedule(k);
+                } else {
+                    console.log("Not available " + kingdoms.kingdom(k).name);
                 }
             }
         }
