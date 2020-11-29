@@ -25,13 +25,9 @@ class MoonView extends React.Component<MoonViewProps, MoonViewState> {
     render() {
         return(
             <div>
-                <Form>
-                <Form.Group controlId={this.props.name}>
                 <Form.Check id={this.props.name} type="switch"
                     label={this.props.name} checked={this.props.checked}
                     onChange={this.handleCheck.bind(this)}/>
-                </Form.Group>
-                </Form>
             </div>
         );
     }

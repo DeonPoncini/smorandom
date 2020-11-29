@@ -79,15 +79,29 @@ class Viewer extends React.Component<ViewerProps, ViewerState> {
         };
         let moons = this.props.output.kingdoms[this.state.current_index][1];
         let checks = []
+        let row = 1;
+        let col = 1;
+        let rows = 21;
         for (let x = 0; x < moons.length; x++) {
             let c = this.state.checks.get(moons[x][0]);
             if (c === undefined) {
                 c = false;
             }
+            let location = {
+                gridRow: row,
+                gridColumn: col,
+            };
             checks.push(
+                <div className="entry" style={location}>
                <MoonView name={moons[x][0]} count={moons[x][1]}
                     checked={c} checkFn={this.onCheck.bind(this)}/>
+                </div>
             );
+            row++;
+            if (row === rows) {
+                col++;
+                row = 1;
+            }
         }
         return(
             <div className="slide" style={bgimage}>
@@ -114,10 +128,10 @@ class Viewer extends React.Component<ViewerProps, ViewerState> {
                         </Button>
                     </Col>
                     </Row>
-                       <Row>
-                        {checks}
-                       </Row>
                 </Container>
+                <div className="contents">
+                    {checks}
+                </div>
             </div>
         );
     }

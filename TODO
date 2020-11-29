@@ -1,0 +1,11 @@
+Arrange all div to fit on screen
+Keyboard control (space to mark, arrows for next/previous)
+48 bit seed (more control bits)
+Only use 32 bit seed for RNG
+Add world peace option: put the add_exit_moon behind a boolean
+Any% run, set leave chance to full at minimum kingdom moons
+Dark side at 250 schedule dark side and terminate
+Darker side at 500 schedule darker side and terminate
+Create production build
+Hosting
+
