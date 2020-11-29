@@ -29,7 +29,8 @@ class App extends React.Component<AppProps, AppState> {
                 <Input executeFn={this.onExecute.bind(this)} />);
         } else {
             return(
-                <Viewer output={this.state.output} />
+                <Viewer output={this.state.output}
+                    executeFn={this.onExecute.bind(this)}/>
             );
         }
     }

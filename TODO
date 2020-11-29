@@ -1,6 +1,7 @@
-Keyboard control (space to mark, arrows for next/previous)
+Display seed on each page
 48 bit seed (more control bits)
 Only use 32 bit seed for RNG
+Update seed display for entering or covering
 Add world peace option: put the add_exit_moon behind a boolean
 Any% run, set leave chance to full at minimum kingdom moons
 Dark side at 250 schedule dark side and terminate

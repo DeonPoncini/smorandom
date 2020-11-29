@@ -27,6 +27,7 @@ import wooded from './images/wooded.jpg';
 
 type ViewerProps = {
     output: Output
+    executeFn: (execute: boolean, output: Output) => void;
 }
 type ViewerState = {
     current_index: number;
@@ -53,6 +54,10 @@ class Viewer extends React.Component<ViewerProps, ViewerState> {
     next() {
         let index = this.state.current_index + 1;
         this.setState({current_index: index});
+    }
+
+    exit() {
+        this.props.executeFn(false, this.props.output);
     }
 
     onCheck(name: string, check: boolean, index: number): void {
@@ -148,6 +153,10 @@ class Viewer extends React.Component<ViewerProps, ViewerState> {
                             keyValue="a"
                             onKeyHandle={this.onPrev.bind(this)}>
                         </KeyHandler>
+                        <Button type="primary"
+                            onClick={this.exit.bind(this)}>
+                            Exit
+                        </Button>
                         <Button type="primary" disabled={prev_disabled}
                             onClick={this.previous.bind(this)}>
                             Previous
@@ -181,6 +190,9 @@ class Viewer extends React.Component<ViewerProps, ViewerState> {
                 </KeyHandler>
                 <div className="contents">
                     {checks}
+                </div>
+                <div className="footer">
+                    Press SPACE to mark moon completed, A for previous kingdom, D for next kingdom
                 </div>
             </div>
         );
