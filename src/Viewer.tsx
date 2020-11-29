@@ -4,6 +4,9 @@ import {Output} from './state';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './Viewer.css';
 
+import smohero from './images/smohero.jpg';
+import cap from './images/cap.jpg';
+
 type ViewerProps = {
     output: Output
 }
@@ -42,7 +45,11 @@ class Viewer extends React.Component<ViewerProps, ViewerState> {
             next_disabled = true;
         }
         let bgimage = {
-            backgroundImage: 'url("images/smohero.jpg")'
+            backgroundImage: 'url(' +
+                image_selector(this.props.output.kingdoms[
+                    this.state.current_index][0]) +
+            ')',
+            objectFit: "contain" as "contain"
         };
         return(
             <div className="slide">
@@ -94,6 +101,16 @@ class Viewer extends React.Component<ViewerProps, ViewerState> {
         );
     }
 
+}
+
+function image_selector(kingdom: string) {
+    if (kingdom === "Cap Kingdom") {
+        return cap;
+    }
+    if (kingdom === "Sand Kingdom") {
+        return cap;
+    }
+    return smohero;
 }
 
 export default Viewer;
