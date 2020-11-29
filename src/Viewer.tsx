@@ -43,7 +43,7 @@ class Viewer extends React.Component<ViewerProps, ViewerState> {
         this.state = {
             current_index: 0,
             checks: new Map(),
-            moon_check: new Map()
+            moon_check: new Map(),
         };
     }
 
@@ -118,6 +118,7 @@ class Viewer extends React.Component<ViewerProps, ViewerState> {
             backgroundRepeat: "no-repeat",
             backgroundSize: "cover"
         };
+        // allocate all the moons in a grid
         let moons = this.props.output.kingdoms[this.state.current_index][1];
         let checks = []
         let row = 1;
@@ -143,6 +144,20 @@ class Viewer extends React.Component<ViewerProps, ViewerState> {
                 col++;
                 row = 1;
             }
+        }
+        // construct the kingdom label
+        let kingdom = this.props.output.kingdoms[this.state.current_index][0];
+        let kingdom_count = 1;
+        // how many other times have we seen this kingdom?
+        for (let y = 0; y < this.state.current_index; y++) {
+            let k = this.props.output.kingdoms[y][0];
+            if (k === kingdom) {
+                kingdom_count++;
+            }
+        }
+        let kingdom_string = kingdom;
+        if (kingdom_count > 1) {
+            kingdom_string = kingdom + " " + kingdom_count.toString(10);
         }
         return(
             <div className="slide" style={bgimage}>
@@ -186,8 +201,7 @@ class Viewer extends React.Component<ViewerProps, ViewerState> {
                         <Col>
                             <div className="heading">
                             <h1>
-                                {this.props.output.kingdoms[
-                                    this.state.current_index][0]}
+                                {kingdom_string}
                             </h1>
                             </div>
                         </Col>
