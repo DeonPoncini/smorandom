@@ -1,5 +1,4 @@
 .slide {
-    background-image: url("images/smohero.jpg");
     width: 100vw;
     height: 100vh;
     background-position: center;
@@ -14,6 +13,8 @@
 .contents {
     text-align: center;
     margin: auto;
+    width: 100vw;
+    height: 100vh;
 }
 
 .list {
