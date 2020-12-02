@@ -10,7 +10,7 @@ import bowser from './images/bowser.jpg';
 import cap from './images/cap.jpg';
 import cascade from './images/cascade.jpg';
 import cloud from './images/cloud.jpg';
-import dark from './images/dark.png';
+import dark from './images/dark.jpg';
 import darker from './images/darker.jpg';
 import lake from './images/lake.jpg';
 import lost from './images/lost.jpg';
@@ -22,7 +22,7 @@ import ruined from './images/ruined.jpg';
 import sand from './images/sand.jpg';
 import seaside from './images/seaside.jpg';
 import smohero from './images/smohero.jpg';
-import snow from './images/snow.png';
+import snow from './images/snow.jpg';
 import wooded from './images/wooded.jpg';
 
 type ViewerProps = {
