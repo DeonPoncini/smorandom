@@ -1,6 +1,6 @@
 import React, { ChangeEvent } from 'react';
 import './Input.css';
-import {Button, Jumbotron, Form, Tab, Tabs} from 'react-bootstrap';
+import {Button, Jumbotron, Form} from 'react-bootstrap';
 import * as seed from './seed';
 import * as generate from './generate';
 import {Output} from './state';
@@ -23,6 +23,22 @@ export class GenerateOptions {
     }
 }
 
+class Checks {
+    anyp: boolean;
+    dark: boolean;
+    darker: boolean;
+    allm: boolean;
+    wp: boolean;
+
+    constructor() {
+        this.anyp = false;
+        this.dark = false;
+        this.darker = false;
+        this.allm = false;
+        this.wp = false;
+    }
+}
+
 type InputProps = {
     executeFn: (execute: boolean, output: Output, seed: string) => void;
 };
@@ -32,6 +48,7 @@ type InputState = {
     options: GenerateOptions,
     valid_seed: boolean,
     valid_runtype: boolean
+    checks: Checks,
 };
 
 class Input extends React.Component<InputProps, InputState> {
@@ -45,7 +62,8 @@ class Input extends React.Component<InputProps, InputState> {
             seed_string: ss,
             options: new GenerateOptions(),
             valid_seed: false,
-            valid_runtype: false
+            valid_runtype: false,
+            checks: new Checks()
         };
     }
 
@@ -77,44 +95,101 @@ class Input extends React.Component<InputProps, InputState> {
         let s: [number, number] = seed.seedFromString(seed_string);
         // check the seed is valid
         let valid = seed.validate(s);
-        this.setState({seed: s, seed_string: seed_string, valid_seed: valid});
+        // setup the checks appropriately
+        let checks = this.state.checks;
+        let rt = seed.runtype(s[0]);
+        switch (rt) {
+            case RunType.Unset:
+                checks.anyp = false;
+                checks.dark = false;
+                checks.darker = false;
+                checks.allm = false;
+            break;
+            case RunType.Any:
+                checks.anyp = true;
+                checks.dark = false;
+                checks.darker = false;
+                checks.allm = false;
+            break;
+            case RunType.Dark:
+                checks.anyp = false;
+                checks.dark = true;
+                checks.darker = false;
+                checks.allm = false;
+            break;
+            case RunType.Darker:
+                checks.anyp = false;
+                checks.dark = false;
+                checks.darker = true;
+                checks.allm = false;
+            break;
+            case RunType.All:
+                checks.anyp = false;
+                checks.dark = false;
+                checks.darker = false;
+                checks.allm = true;
+            break;
+        }
+        checks.wp = seed.worldpeace(s[0]);
+        this.setState({seed: s, seed_string: seed_string, valid_seed: valid,
+            checks: checks});
     }
 
-    updateCheck(rt: RunType): void {
+    updateCheck(rt: RunType, checks: Checks): void {
         let options = this.state.options;
         options.runtype = rt;
         let s:number = seed.updateRunType(rt, this.state.seed[0]);
         let st: string = seed.seedToString([s, this.state.seed[1]]);
         let valid = seed.validate([s, this.state.seed[1]]);
         this.setState({seed: [s, this.state.seed[1]], seed_string: st,
-            options: options, valid_seed: valid});
+            options: options, valid_seed: valid, checks: checks});
     }
 
     handleAny(event: React.MouseEvent<HTMLInputElement>): void {
         let checked: boolean = event.currentTarget.checked;
         if (checked) {
-            this.updateCheck(RunType.Any);
+            let checks = this.state.checks;
+            checks.anyp = true;
+            checks.dark = false;
+            checks.darker = false;
+            checks.allm = false;
+            this.updateCheck(RunType.Any, checks);
         }
     }
 
     handleDark(event: React.MouseEvent<HTMLInputElement>): void {
         let checked: boolean = event.currentTarget.checked;
         if (checked) {
-            this.updateCheck(RunType.Dark);
+            let checks = this.state.checks;
+            checks.anyp = false;
+            checks.dark = true;
+            checks.darker = false;
+            checks.allm = false;
+            this.updateCheck(RunType.Dark, checks);
         }
     }
 
     handleDarker(event: React.MouseEvent<HTMLInputElement>): void {
         let checked: boolean = event.currentTarget.checked;
         if (checked) {
-            this.updateCheck(RunType.Darker);
+            let checks = this.state.checks;
+            checks.anyp = false;
+            checks.dark = false;
+            checks.darker = true;
+            checks.allm = false;
+            this.updateCheck(RunType.Darker, checks);
         }
     }
 
     handleAll(event: React.MouseEvent<HTMLInputElement>): void {
         let checked: boolean = event.currentTarget.checked;
         if (checked) {
-            this.updateCheck(RunType.All);
+            let checks = this.state.checks;
+            checks.anyp = false;
+            checks.dark = false;
+            checks.darker = false;
+            checks.allm = true;
+            this.updateCheck(RunType.All, checks);
         }
     }
 
@@ -124,67 +199,49 @@ class Input extends React.Component<InputProps, InputState> {
         options.worldpeace = checked;
         let s:number = seed.updateWorldPeace(checked, this.state.seed[0]);
         let st: string = seed.seedToString([s, this.state.seed[1]]);
+        let checks = this.state.checks;
+        checks.wp = checked;
         this.setState({seed: [s, this.state.seed[1]], seed_string: st,
-            options: options});
+            options: options, checks: checks});
     }
 
     render() {
-        let rt = seed.runtype(this.state.seed[0]);
-        let rttext = (<div>Run is unset</div>);
-        switch (rt) {
-            case 1: rttext = (<div>Any%</div>); break;
-            case 2: rttext = (<div>Dark Side</div>); break;
-            case 3: rttext = (<div>Darker Side</div>); break;
-            case 4: rttext = (<div>All Moons</div>); break;
-            default: break;
-        }
-        let wp = seed.worldpeace(this.state.seed[0]);
-        let wptext = (<div>World peace disabled</div>);
-        if (wp) {
-            wptext = (<div>World peace enabled</div>);
-        }
         return(
             <div className="bgimage">
                 <Jumbotron>
                 <div><h2>Randomizer</h2></div>
-                <Tabs id="mainpage" >
-                <Tab eventKey="generatenew"
-                     title="Generate a new seed">
-                <div><h3>{this.state.seed_string}</h3></div>
+                <Form.Control
+                        type="text"
+                        value={this.state.seed_string}
+                        onChange={this.handleSeedChange.bind(this)}
+                        placeholder="Seed"
+                        isValid={seed.validate(this.state.seed)}>
+                </Form.Control>
+                {!this.state.valid_seed && <div>Seed is invalid</div>}
                 <Form.Group controlId="run">
                     <Form.Check inline type="radio" label="Any %"
                         name="runtype" id="runtypeany"
+                        checked={this.state.checks.anyp}
                         onChange={this.handleAny.bind(this)}/>
                     <Form.Check inline type="radio" label="Dark Side"
                         name="runtype" id="runtypedark"
+                        checked={this.state.checks.dark}
                         onChange={this.handleDark.bind(this)}/>
                     <Form.Check inline type="radio" label="Darker Side"
                         name="runtype" id="runtypedarker"
+                        checked={this.state.checks.darker}
                         onChange={this.handleDarker.bind(this)}/>
                     <Form.Check inline type="radio" label="All Moons"
                         name="runtype" id="runtypeall"
+                        checked={this.state.checks.allm}
                         onChange={this.handleAll.bind(this)}/>
                 </Form.Group>
                 <Form.Group>
                     <Form.Check inline type="switch" label="World Peace"
                         name="worldpeace" id="worldpeace"
+                        checked={this.state.checks.wp}
                         onChange={this.handleWorldPeace.bind(this)}/>
                 </Form.Group>
-                </Tab>
-                <Tab eventKey="enterseed"
-                     title="Enter an existing seed">
-                    <Form.Control
-                            type="text"
-                            value={this.state.seed_string}
-                            onChange={this.handleSeedChange.bind(this)}
-                            placeholder="Seed"
-                            isValid={seed.validate(this.state.seed)}>
-                    </Form.Control>
-                    {!this.state.valid_seed && <div>Seed is invalid</div>}
-                    {this.state.valid_seed && <div>{rttext}</div>}
-                    {this.state.valid_seed && <div>{wptext}</div>}
-                </Tab>
-                </Tabs>
                 <Button variant="primary" disabled={!this.state.valid_seed}
                     onClick={this.handleSubmit.bind(this)}>
                     Generate
