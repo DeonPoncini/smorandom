@@ -45,8 +45,6 @@ export function generate(seed: number, options: GenerateOptions): Output {
             let kt = kingdoms.kingdom(state.current_kingdom).moons_to_leave;
             if (tkm + scheduled > kt) {
                 scheduled = kt - tkm;
-                console.log("UPDATED SCHEDULED: " + scheduled);
-                console.log("tkm: " + tkm + " kt: " + kt);
             }
         }
         if (scheduled === 0) {
@@ -60,7 +58,6 @@ export function generate(seed: number, options: GenerateOptions): Output {
             // schedule the next kingdom
             if (!state.schedule_kingdom()) {
                 // no more moons and no more kingdoms, we are done
-                console.log("WE ARE DONE");
                 break;
             }
             // end depending on type

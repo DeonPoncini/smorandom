@@ -80,7 +80,6 @@ export class Moons {
     }
 
     return_available(state: State): Array<MoonID> {
-        console.log(state);
         let kingdom = state.current_kingdom;
         let [s, e] = this.offset[kingdom];
         if (s === e) {
