@@ -6,11 +6,12 @@ Author: Deon Poncini
 ---
 SMO Randomizer
 ==================
+Available at http://smorandom.com
 
 Description
 -----------
 This is a website that allows you to generate randomized moon sequences through
-Super Mario Odyssey. It is a port of the [original randomizer]([https://github.com/DeonPoncini/odyssey_randomizer)
+Super Mario Odyssey. It is a port of the [original randomizer](https://github.com/DeonPoncini/odyssey_randomizer)
 written in Rust that did All Moons randomization and printed to console. The
 implementation here is a straight port to TypeScript from Rust.
 This updated version is hopefully much prettier, as well as providing options
@@ -37,23 +38,6 @@ chosen) until reaching Mushroom. In post game, travel from one kingdom to the
 next is completely randomized
 * Sub area moons are not generally tied together, so repeated visits to sub areas
 are required
-
-I Want to Re-route the Moons
-----------------------------
-Maybe one day I will do what should be done and have all the kingdom and moon
-dependencies in a configuration file, but for now they are hardcoded in the
-following places:
-
-For Kingdom dependencies:
-
-    src/kingdom.rs:148 (Kingdoms::new())
-
-For Moon dependencies:
-
-    src/moon.rs:139 (Moons::new())
-
-I will describe how the routing works in the next sections and you can just alter
-the code to make it route like you want removing or adding dependencies.
 
 How does Kingdom Routing work?
 ------------------------------
