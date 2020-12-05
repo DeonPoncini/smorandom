@@ -245,8 +245,17 @@ class State {
         this.moons_to_schedule.push(id);
     }
 
-    schedulable(): number {
-        return this.moons_to_schedule.length + this.exit_moon_chain.length;
+    schedulable(moons: Moons): number {
+        // calculate the total weight of moons left
+        let weight = 0;
+        // we need to know the count of all the moons in case of multi
+        for (let mm of this.exit_moon_chain) {
+            weight += moons.moon(mm).count;
+        }
+        for (let mm of this.moons_to_schedule) {
+            weight += moons.moon(mm).count;
+        }
+        return weight;
     }
 
     schedule_moon(kingdoms: Kingdoms, moons: Moons): boolean {

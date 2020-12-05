@@ -48,7 +48,7 @@ export function generate(seed: number, options: GenerateOptions): Output {
         } else {
             ec = kingdoms.kingdom(state.current_kingdom).moons_to_leave;
         }
-        let scheduleable = state.schedulable();
+        let scheduleable = state.schedulable(moons);
         let exit_count = Math.min(ec, scheduleable);
         let scheduled = 0;
         if (exit_count === scheduleable) {
