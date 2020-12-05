@@ -142,6 +142,20 @@ A fix for this might be to specify exactly the moon to schedule, but as no
 mechanism exists for this I just left it as is, if you want to not grab the
 Captain Toad moon it isn't a big deal. Something for the future fixes list.
 
+How does World Peace work?
+--------------------------
+For world peace mode, the algorithm calculates the shortest path through the
+graph using breadth first search from the moon needed to exit. This is named
+the exit moon chain, and stored separately from the moons to schedule list.
+When in world peace mode (or always for Bowser's Kingdom) and in pre-game, when
+scheduling a moon it is checked if that moon is in the list of dependencies of
+the World Peace moon. If so, it isn't scheduled. Then, when scheduling, the
+scheduler randomly selects from the two lists - either randomly from available
+moons, or just the next dependency moon. If the number of moons left to schedule
+before exiting is equal to the length of dependent moons left, they are all
+scheduled in order to ensure that world peace is achieved before the number of
+total moons are met.
+
 What is the seed format?
 ------------------------
 The seed is constructed from two 32 bit numbers put together into a single 64
@@ -161,6 +175,6 @@ TODO
 * Add configuration parameter for leave chance (harded to 10% currently)
 * Add configuration parameter for number of moons before trying to leave in post
 game (currently hard coded to 1)
-* Create minimal world peace with shortest path to world peace moon
 * Support Any% without Moon kingdom Moons
 * Support Dark Side without Captain Toad moon
+* Support advanced techniques like IP clip, Lake clip etc
