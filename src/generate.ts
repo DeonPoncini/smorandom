@@ -16,8 +16,26 @@ export function generate(seed: number, options: GenerateOptions): Output {
     // start up the first kingdom
     state.add_kingdom_to_schedule(KingdomName.Cap);
     state.schedule_kingdom();
+    let current_kingdom = KingdomName.Darker;
 
     while(1) {
+        // check if we are in world peace mode
+        if (!state.completed_main_game) {
+            if (options.worldpeace ||
+                state.current_kingdom === KingdomName.Bowser) {
+                state.world_peace_active = true;
+                // if we switch kingdoms, recalculate the exit chain
+                if (current_kingdom !== state.current_kingdom) {
+                    // calculate the moon exit chain
+                    state.calculate_exit_moon_chain(kingdoms, moons);
+                    current_kingdom = state.current_kingdom;
+                }
+            } else {
+                state.world_peace_active = false;
+            }
+        } else {
+            state.world_peace_active = false;
+        }
         // first, find all moons that can be scheduled
         let available: Array<MoonID> = moons.return_available(state);
         for (let a of available) {
@@ -39,8 +57,7 @@ export function generate(seed: number, options: GenerateOptions): Output {
             scheduled = random.gen_range_int(exit_count, scheduleable-1);
         }
         // for Any% leave after the number of scheduled moons exactly
-        if (options.runtype === RunType.Any && !options.worldpeace &&
-                !anykeepgoing) {
+        if (options.runtype === RunType.Any && !anykeepgoing) {
             let tkm = state.total_kingdom_moons;
             let kt = kingdoms.kingdom(state.current_kingdom).moons_to_leave;
             if (tkm + scheduled > kt) {
@@ -79,7 +96,7 @@ export function generate(seed: number, options: GenerateOptions): Output {
         } else {
             // schedule the moons
             for (let x = 0; x < scheduled; x++) {
-                state.schedule_moon(moons);
+                state.schedule_moon(kingdoms, moons);
             }
             // lets only leave with a 10% chance that increases 10% each time
             let chance = random.gen_range_int(0, 10);

@@ -37,6 +37,8 @@ class State {
     kingdoms_scheduled: Map<KingdomName, number>;
     kingdoms_completed: Set<KingdomName>;
     completed_main_game: boolean;
+    world_peace_active: boolean;
+    exit_moon_chain: Array<MoonID>;
     random: Random;
 
     constructor(random: Random) {
@@ -52,6 +54,8 @@ class State {
         this.kingdoms_scheduled = new Map();
         this.kingdoms_completed = new Set();
         this.completed_main_game = false;
+        this.world_peace_active = false;
+        this.exit_moon_chain = [];
         this.random = random;
     }
 
@@ -137,7 +141,37 @@ class State {
             }
         }
         this.moons_stored_queue.set(this.current_kingdom, []);
+
         return true;
+    }
+
+    calculate_exit_moon_chain(kingdoms: Kingdoms, moons: Moons) {
+        // no exit moon available
+        let exit_moon = kingdoms.kingdom(this.current_kingdom).exit_moon;
+        if (exit_moon === undefined || exit_moon < 0) {
+            return [];
+        }
+
+        // do a BFS from the exit moon to all its dependencies
+        let ret = [];
+        let q = [];
+        let visited = new Map();
+        q.push(exit_moon);
+        while (q.length !== 0) {
+            let m = q.shift();
+            let v = visited.get(m);
+            if (v !== true) {
+                // mark visited, push to ret queue and insert prereqs
+                if (m !== undefined) {
+                    visited.set(m, true);
+                    ret.push(m);
+                    for (let mm of moons.moon(m).prerequisite_moons) {
+                        q.push(mm);
+                    }
+                }
+            }
+        }
+        this.exit_moon_chain = ret.reverse();
     }
 
     complete_kingdom(id: KingdomName): void {
@@ -197,20 +231,62 @@ class State {
     }
 
     add_moon_to_schedule(id: MoonID): void {
+        // don't add to schedule if its world peace and present in the exit chain
+        if (this.world_peace_active) {
+            for (let em of this.exit_moon_chain) {
+                // dependency moon
+                if (em === id) {
+                    break;
+                }
+            }
+        }
+
         this.moons_to_schedule.push(id);
     }
 
-    schedule_moon(moons: Moons): boolean {
+    schedule_moon(kingdoms: Kingdoms, moons: Moons): boolean {
         // if there are no moons to schedule, return false
         if (this.moons_to_schedule.length === 0) {
             return false;
         }
 
+        let schedule_from_exit_chain = false;
+        if (this.world_peace_active) {
+            // if moons remaining is equal to or less than exit chain
+            // always schedule exit chain
+            let remaining = kingdoms.kingdom(this.current_kingdom).moons_to_leave
+                - this.total_kingdom_moons;
+            let exit_chain_weight = 0;
+            // we need to know the count of all the moons in case of multi
+            for (let mm of this.exit_moon_chain) {
+                exit_chain_weight += moons.moon(mm).count;
+            }
+            if (remaining <= exit_chain_weight) {
+                schedule_from_exit_chain = true;
+            } else {
+                // flip a coin
+                let random = this.random.gen_range_int(0, 1);
+                if (random === 0) {
+                    schedule_from_exit_chain = true;
+                }
+            }
+        }
+
+        let mts = 0;
         // randomly pick a moon and schedule it
-        let random = this.random.gen_range_int(0, this.moons_to_schedule.length-1);
-        let mts = this.moons_to_schedule[random];
+        if (schedule_from_exit_chain && this.exit_moon_chain.length !== 0) {
+            // take the front of the chain
+            let m = this.exit_moon_chain.shift();
+            if (m !== undefined) {
+                mts = m;
+            }
+        } else {
+            let random = this.random.gen_range_int(0,
+                this.moons_to_schedule.length-1);
+            mts = this.moons_to_schedule[random];
+            this.moons_to_schedule.splice(random, 1);
+        }
         let id = JSON.parse(JSON.stringify(mts));
-        this.moons_to_schedule.splice(random, 1);
         let count = moons.moon(id).count;
         // schedule it
         this.moons_ordered.push(id);
