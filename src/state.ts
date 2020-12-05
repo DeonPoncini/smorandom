@@ -258,7 +258,7 @@ class State {
         return weight;
     }
 
-    schedule_moon(kingdoms: Kingdoms, moons: Moons): boolean {
+    schedule_moon(kingdoms: Kingdoms, moons: Moons): number {
         console.log("Scheduling moon");
         let schedule_from_exit_chain = false;
         if (this.world_peace_active) {
@@ -287,12 +287,12 @@ class State {
             if (this.world_peace_active) {
                 // schedule from the exit chain if available
                 if (this.exit_moon_chain.length === 0) {
-                    return false;
+                    return 0;
                 } else {
                     schedule_from_exit_chain = true;
                 }
             } else {
-                return false;
+                return 0;
             }
         }
 
@@ -319,7 +319,7 @@ class State {
         this.moons_scheduled.add(id);
         this.total_kingdom_moons += count;
         this.total_moons += count;
-        return true;
+        return count;
     }
 
     moon_scheduled(moon: MoonID): boolean {

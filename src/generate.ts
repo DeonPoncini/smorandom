@@ -95,8 +95,9 @@ export function generate(seed: number, options: GenerateOptions): Output {
             }
         } else {
             // schedule the moons
-            for (let x = 0; x < scheduled; x++) {
-                state.schedule_moon(kingdoms, moons);
+            let x = 0;
+            while(x < scheduled) {
+                x += state.schedule_moon(kingdoms, moons);
             }
             // lets only leave with a 10% chance that increases 10% each time
             let chance = random.gen_range_int(0, 10);
