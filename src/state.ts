@@ -236,7 +236,8 @@ class State {
             for (let em of this.exit_moon_chain) {
                 // dependency moon
                 if (em === id) {
-                    break;
+                    console.log("Skipping moon " +id);
+                    return;
                 }
             }
         }
@@ -244,12 +245,12 @@ class State {
         this.moons_to_schedule.push(id);
     }
 
-    schedule_moon(kingdoms: Kingdoms, moons: Moons): boolean {
-        // if there are no moons to schedule, return false
-        if (this.moons_to_schedule.length === 0) {
-            return false;
-        }
+    schedulable(): number {
+        return this.moons_to_schedule.length + this.exit_moon_chain.length;
+    }
 
+    schedule_moon(kingdoms: Kingdoms, moons: Moons): boolean {
+        console.log("Scheduling moon");
         let schedule_from_exit_chain = false;
         if (this.world_peace_active) {
             // if moons remaining is equal to or less than exit chain
@@ -272,6 +273,20 @@ class State {
             }
         }
 
+        // if there are no moons to schedule, return false
+        if (this.moons_to_schedule.length === 0) {
+            if (this.world_peace_active) {
+                // schedule from the exit chain if available
+                if (this.exit_moon_chain.length === 0) {
+                    return false;
+                } else {
+                    schedule_from_exit_chain = true;
+                }
+            } else {
+                return false;
+            }
+        }
+
         let mts = 0;
         // randomly pick a moon and schedule it
         if (schedule_from_exit_chain && this.exit_moon_chain.length !== 0) {
@@ -279,12 +294,14 @@ class State {
             let m = this.exit_moon_chain.shift();
             if (m !== undefined) {
                 mts = m;
+                console.log("Scheduling from exit chain " + moons.moon(mts));
             }
         } else {
             let random = this.random.gen_range_int(0,
                 this.moons_to_schedule.length-1);
             mts = this.moons_to_schedule[random];
             this.moons_to_schedule.splice(random, 1);
+            console.log("Scheduling from mts " + moons.moon(mts));
         }
         let id = JSON.parse(JSON.stringify(mts));
         let count = moons.moon(id).count;
