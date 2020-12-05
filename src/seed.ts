@@ -5,8 +5,12 @@ export function createSeed(rt: RunType): [number, number] {
     let r: number = 0x0;
     r = updateRunType(rt, r);
     // create a 32 bit random number to fill the rest
-    let n = Math.floor(Math.random() * (1<<30));
+    let n = generateSeed();
     return [r, n];
+}
+
+export function generateSeed(): number {
+    return Math.floor(Math.random() * (1<<30));
 }
 
 export function updateRunType(rt: RunType, r: number): number {

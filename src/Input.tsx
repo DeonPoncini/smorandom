@@ -205,6 +205,12 @@ class Input extends React.Component<InputProps, InputState> {
             options: options, checks: checks});
     }
 
+    newSeed(): void {
+        let s: number = seed.generateSeed();
+        let st: string = seed.seedToString([this.state.seed[0], s]);
+        this.setState({seed: [this.state.seed[0], s], seed_string: st});
+    }
+
     render() {
         return(
             <div className="bgimage">
@@ -245,6 +251,10 @@ class Input extends React.Component<InputProps, InputState> {
                 <Button variant="primary" disabled={!this.state.valid_seed}
                     onClick={this.handleSubmit.bind(this)}>
                     Generate
+                </Button>
+                <div className="spacer" />
+                <Button variant="primary" onClick={this.newSeed.bind(this)}>
+                    New Seed
                 </Button>
                 </Jumbotron>
             </div>
