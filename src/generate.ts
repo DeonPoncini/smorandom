@@ -79,8 +79,14 @@ export function generate(seed: number, options: GenerateOptions): Output {
             }
             // end depending on type
             if (options.runtype === RunType.Any) {
-                if (state.current_kingdom === KingdomName.Moon) {
-                    break;
+                if (options.mkany) {
+                    if (state.current_kingdom === KingdomName.Moon) {
+                        break;
+                    }
+                } else {
+                    if (state.current_kingdom === KingdomName.Bowser) {
+                        break;
+                    }
                 }
             }
             if (options.runtype === RunType.Dark) {
@@ -106,8 +112,17 @@ export function generate(seed: number, options: GenerateOptions): Output {
                 chance = -1;
             }
             if (options.runtype === RunType.Any) {
-                if (state.current_kingdom === KingdomName.Moon) {
-                    break;
+                if (options.mkany) {
+                    if (state.current_kingdom === KingdomName.Moon) {
+                        break;
+                    }
+                } else {
+                    if (state.current_kingdom === KingdomName.Bowser) {
+                        if (state.next_kingdom(kingdoms, options)) {
+                            // we are able to leave the kingdom
+                            break;
+                        }
+                    }
                 }
             }
             // for Dark side, we leave for Dark side if we are done
