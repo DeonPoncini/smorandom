@@ -39,6 +39,7 @@ class State {
     completed_main_game: boolean;
     world_peace_active: boolean;
     exit_moon_chain: Array<MoonID>;
+    exit_moon_chain_set: Set<MoonID>;
     random: Random;
 
     constructor(random: Random) {
@@ -56,6 +57,7 @@ class State {
         this.completed_main_game = false;
         this.world_peace_active = false;
         this.exit_moon_chain = [];
+        this.exit_moon_chain_set = new Set();
         this.random = random;
     }
 
@@ -151,6 +153,7 @@ class State {
         if (exit_moon === undefined || exit_moon < 0) {
             return [];
         }
+        this.exit_moon_chain_set = new Set();
 
         // do a BFS from the exit moon to all its dependencies
         let ret = [];
@@ -165,6 +168,7 @@ class State {
                 if (m !== undefined) {
                     visited.set(m, true);
                     ret.push(m);
+                    this.exit_moon_chain_set.add(m);
                     for (let mm of moons.moon(m).prerequisite_moons) {
                         q.push(mm);
                     }
@@ -233,12 +237,8 @@ class State {
     add_moon_to_schedule(id: MoonID): void {
         // don't add to schedule if its world peace and present in the exit chain
         if (this.world_peace_active) {
-            for (let em of this.exit_moon_chain) {
-                // dependency moon
-                if (em === id) {
-                    console.log("Skipping moon " +id);
-                    return;
-                }
+            if (this.exit_moon_chain_set.has(id)) {
+                return;
             }
         }
 
