@@ -33,13 +33,39 @@ export function updateRunType(rt: RunType, r: number): number {
     return r;
 }
 
-export function updateWorldPeace(wp: boolean, r: number): number {
-    // zero out the world peace bits
-    r = r & 0xF7FFFFFF;
-    if (wp) {
-        r = r | 0x08000000;
-    }
+function updateValue(b: boolean, r: number,
+        andmask: number, ormask: number): number {
+    r = r & andmask;
+    if (b) { r = r | ormask; }
     return r;
+}
+
+export function updateWorldPeace(b: boolean, r: number): number {
+    return updateValue(b, r, 0xF7FFFFFF,0x08000000);
+}
+
+export function updateMkAny(b: boolean, r: number): number {
+    return updateValue(b, r, 0xFBFFFFFF,0x04000000);
+}
+
+export function updateBacktrack(b: boolean, r: number): number {
+    return updateValue(b, r, 0xFDFFFFFF,0x02000000);
+}
+
+export function updateIpClip(b: boolean, r: number): number {
+    return updateValue(b, r, 0xFEFFFFFF,0x01000000);
+}
+
+export function updateLakeClip(b: boolean, r: number): number {
+    return updateValue(b, r, 0xFF7FFFFF,0x00800000);
+}
+
+export function updateSnowClip(b: boolean, r: number): number {
+    return updateValue(b, r, 0xFFBFFFFF,0x00400000);
+}
+
+export function updateSnowDram(b: boolean, r: number): number {
+    return updateValue(b, r, 0xFFDFFFFF,0x00200000);
 }
 
 export function seedToString(s: [number, number]): string {
@@ -65,8 +91,8 @@ export function validate(s: [number, number]): boolean {
         return false;
     }
 
-    // all bits must be zero after world peace
-    let q = (s[0] & 0x07FFFFFF);
+    // all bits must be zero after snow dram
+    let q = (s[0] & 0x001FFFFF);
     if (q !== 0) {
         return false;
     }
@@ -85,11 +111,36 @@ export function runtype(s: number): RunType {
     }
 }
 
-export function worldpeace(s: number): boolean {
-    // the fifth bit is worldpeace
-    let r = (s & 0x08000000) >> 27;
-    if (r === 1) {
-        return true;
-    }
+function revealbit(s: number, mask: number, shift: number): boolean {
+    let r = (s & mask) >> shift;
+    if (r === 1) { return true; }
     return false;
+}
+
+export function worldpeace(s: number): boolean {
+    return revealbit(s, 0x08000000, 27);
+}
+
+export function mkany(s: number): boolean {
+    return revealbit(s, 0x04000000, 26);
+}
+
+export function backtrack(s: number): boolean {
+    return revealbit(s, 0x02000000, 25);
+}
+
+export function ipclip(s: number): boolean {
+    return revealbit(s, 0x01000000, 24);
+}
+
+export function lakeclip(s: number): boolean {
+    return revealbit(s, 0x00800000, 23);
+}
+
+export function snowclip(s: number): boolean {
+    return revealbit(s, 0x00400000, 22);
+}
+
+export function snowdram(s: number): boolean {
+    return revealbit(s, 0x00200000, 21);
 }

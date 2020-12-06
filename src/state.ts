@@ -259,7 +259,6 @@ class State {
     }
 
     schedule_moon(kingdoms: Kingdoms, moons: Moons): number {
-        console.log("Scheduling moon");
         let schedule_from_exit_chain = false;
         if (this.world_peace_active) {
             // if moons remaining is equal to or less than exit chain
@@ -303,14 +302,12 @@ class State {
             let m = this.exit_moon_chain.shift();
             if (m !== undefined) {
                 mts = m;
-                console.log("Scheduling from exit chain " + moons.moon(mts));
             }
         } else {
             let random = this.random.gen_range_int(0,
                 this.moons_to_schedule.length-1);
             mts = this.moons_to_schedule[random];
             this.moons_to_schedule.splice(random, 1);
-            console.log("Scheduling from mts " + moons.moon(mts));
         }
         let id = JSON.parse(JSON.stringify(mts));
         let count = moons.moon(id).count;

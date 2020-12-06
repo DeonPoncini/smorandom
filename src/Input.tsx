@@ -16,10 +16,22 @@ export enum RunType {
 export class GenerateOptions {
     runtype: RunType;
     worldpeace: boolean;
+    mkany: boolean;
+    backtrack: boolean;
+    ipclip: boolean;
+    lakeclip: boolean;
+    snowclip: boolean;
+    snowdram: boolean;
 
     constructor() {
         this.runtype = RunType.Unset;
         this.worldpeace = false;
+        this.mkany = false;
+        this.backtrack = false;
+        this.ipclip = false;
+        this.lakeclip = false;
+        this.snowclip = false;
+        this.snowdram = false;
     }
 }
 
@@ -29,6 +41,12 @@ class Checks {
     darker: boolean;
     allm: boolean;
     wp: boolean;
+    mkany: boolean;
+    backtrack: boolean;
+    ipclip: boolean;
+    lakeclip: boolean;
+    snowclip: boolean;
+    snowdram: boolean;
 
     constructor() {
         this.anyp = false;
@@ -36,6 +54,12 @@ class Checks {
         this.darker = false;
         this.allm = false;
         this.wp = false;
+        this.mkany = false;
+        this.backtrack = false;
+        this.ipclip = false;
+        this.lakeclip = false;
+        this.snowclip = false;
+        this.snowdram = false;
     }
 }
 
@@ -207,6 +231,78 @@ class Input extends React.Component<InputProps, InputState> {
             options: options, checks: checks});
     }
 
+    handleMkAny(event: React.MouseEvent<HTMLInputElement>): void {
+        let checked: boolean = event.currentTarget.checked;
+        let options = this.state.options;
+        options.mkany = checked;
+        let checks = this.state.checks;
+        checks.mkany = checked;
+        let s:number = seed.updateMkAny(checked, this.state.seed[0]);
+        let st: string = seed.seedToString([s, this.state.seed[1]]);
+        this.setState({seed: [s, this.state.seed[1]], seed_string: st,
+            options: options, checks: checks});
+    }
+
+    handleBacktrack(event: React.MouseEvent<HTMLInputElement>): void {
+        let checked: boolean = event.currentTarget.checked;
+        let options = this.state.options;
+        options.backtrack = checked;
+        let checks = this.state.checks;
+        checks.backtrack = checked;
+        let s:number = seed.updateBacktrack(checked, this.state.seed[0]);
+        let st: string = seed.seedToString([s, this.state.seed[1]]);
+        this.setState({seed: [s, this.state.seed[1]], seed_string: st,
+            options: options, checks: checks});
+    }
+
+    handleIpClip(event: React.MouseEvent<HTMLInputElement>): void {
+        let checked: boolean = event.currentTarget.checked;
+        let options = this.state.options;
+        options.ipclip = checked;
+        let checks = this.state.checks;
+        checks.ipclip = checked;
+        let s:number = seed.updateIpClip(checked, this.state.seed[0]);
+        let st: string = seed.seedToString([s, this.state.seed[1]]);
+        this.setState({seed: [s, this.state.seed[1]], seed_string: st,
+            options: options, checks: checks});
+    }
+
+    handleLakeClip(event: React.MouseEvent<HTMLInputElement>): void {
+        let checked: boolean = event.currentTarget.checked;
+        let options = this.state.options;
+        options.lakeclip = checked;
+        let checks = this.state.checks;
+        checks.lakeclip = checked;
+        let s:number = seed.updateLakeClip(checked, this.state.seed[0]);
+        let st: string = seed.seedToString([s, this.state.seed[1]]);
+        this.setState({seed: [s, this.state.seed[1]], seed_string: st,
+            options: options, checks: checks});
+    }
+
+    handleSnowClip(event: React.MouseEvent<HTMLInputElement>): void {
+        let checked: boolean = event.currentTarget.checked;
+        let options = this.state.options;
+        options.snowclip = checked;
+        let checks = this.state.checks;
+        checks.snowclip = checked;
+        let s:number = seed.updateSnowClip(checked, this.state.seed[0]);
+        let st: string = seed.seedToString([s, this.state.seed[1]]);
+        this.setState({seed: [s, this.state.seed[1]], seed_string: st,
+            options: options, checks: checks});
+    }
+
+    handleSnowDram(event: React.MouseEvent<HTMLInputElement>): void {
+        let checked: boolean = event.currentTarget.checked;
+        let options = this.state.options;
+        options.snowdram = checked;
+        let checks = this.state.checks;
+        checks.snowdram = checked;
+        let s:number = seed.updateSnowDram(checked, this.state.seed[0]);
+        let st: string = seed.seedToString([s, this.state.seed[1]]);
+        this.setState({seed: [s, this.state.seed[1]], seed_string: st,
+            options: options, checks: checks});
+    }
+
     newSeed(): void {
         let s: number = seed.generateSeed();
         let st: string = seed.seedToString([this.state.seed[0], s]);
@@ -249,6 +345,42 @@ class Input extends React.Component<InputProps, InputState> {
                         name="worldpeace" id="worldpeace"
                         checked={this.state.checks.wp}
                         onChange={this.handleWorldPeace.bind(this)}/>
+                </Form.Group>
+                <Form.Group>
+                    <Form.Check inline type="switch" label="Moon Kingdom in Any%"
+                        name="mkany" id="mkany"
+                        checked={this.state.checks.mkany}
+                        onChange={this.handleMkAny.bind(this)}/>
+                </Form.Group>
+                <Form.Group>
+                    <Form.Check inline type="switch" label="Backtrack in pre-game"
+                        name="backtrack" id="backtrack"
+                        checked={this.state.checks.backtrack}
+                        onChange={this.handleBacktrack.bind(this)}/>
+                </Form.Group>
+                <Form.Group>
+                    <Form.Check inline type="switch" label="IP Clip"
+                        name="ipclip" id="ipclip"
+                        checked={this.state.checks.ipclip}
+                        onChange={this.handleIpClip.bind(this)}/>
+                </Form.Group>
+                <Form.Group>
+                    <Form.Check inline type="switch" label="Lake Clip"
+                        name="lakeclip" id="lakeclip"
+                        checked={this.state.checks.lakeclip}
+                        onChange={this.handleLakeClip.bind(this)}/>
+                </Form.Group>
+                <Form.Group>
+                    <Form.Check inline type="switch" label="Snow Clip"
+                        name="snowclip" id="snowclip"
+                        checked={this.state.checks.snowclip}
+                        onChange={this.handleSnowClip.bind(this)}/>
+                </Form.Group>
+                <Form.Group>
+                    <Form.Check inline type="switch" label="Snow Dram"
+                        name="snowdram" id="snowdram"
+                        checked={this.state.checks.snowdram}
+                        onChange={this.handleSnowDram.bind(this)}/>
                 </Form.Group>
                 <Button variant="primary" disabled={!this.state.valid_seed}
                     onClick={this.handleSubmit.bind(this)}>
