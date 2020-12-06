@@ -362,7 +362,9 @@ export class Moons {
         this.moons[sand2].add_prereq_moon(sand1);
         let sand3 = this.moons.length;
         this.moons.push(new Moon("Showdown on the Inverted Pyramid", KingdomName.Sand, true));
-        this.moons[sand3].add_prereq_moon(sand2);
+        if (!options.ipclip) {
+            this.moons[sand3].add_prereq_moon(sand2);
+        }
         let sand4 = this.moons.length;
         this.moons.push(new Moon("The Hole in the Desert", KingdomName.Sand, true));
         this.moons[sand4].add_prereq_moon(sand3);
@@ -377,13 +379,17 @@ export class Moons {
         this.moons.push(new Moon("Secret of the Mural", KingdomName.Sand));
         let sand10 = this.moons.length;
         this.moons.push(new Moon("Secret of the Inverted Mural", KingdomName.Sand));
-        this.moons[sand10].add_prereq_moon(sand2);
+        if (!options.ipclip) {
+            this.moons[sand10].add_prereq_moon(sand2);
+        }
         this.moons.push(new Moon("On Top of the Stone Archway", KingdomName.Sand));
         this.moons.push(new Moon("From a Crate in the Ruins", KingdomName.Sand));
         this.moons.push(new Moon("On the Lone Pillar", KingdomName.Sand));
         let sand14 = this.moons.length;
         this.moons.push(new Moon("On the Statue's Tail", KingdomName.Sand));
-        this.moons[sand14].add_prereq_moon(sand2);
+        if (!options.ipclip) {
+            this.moons[sand14].add_prereq_moon(sand2);
+        }
         let sand15 = this.moons.length;
         this.moons.push(new Moon("Hang Your Hat on the Fountain", KingdomName.Sand));
         this.moons[sand15].add_prereq_moon(sand4);
@@ -457,7 +463,9 @@ export class Moons {
         this.moons.push(new Moon("Walking the Desert", KingdomName.Sand));
         let sand46 = this.moons.length;
         this.moons.push(new Moon("Hidden Room in the Inverted Pyramid", KingdomName.Sand));
-        this.moons[sand46].add_prereq_moon(sand2);
+        if (!options.ipclip) {
+            this.moons[sand46].add_prereq_moon(sand2);
+        }
         let sand47 = this.moons.length;
         this.moons.push(new Moon("Underground Treasure Chest", KingdomName.Sand));
         this.moons[sand47].add_prereq_moon(sand3);
@@ -1052,7 +1060,9 @@ export class Moons {
         // metro kingdom
         let metro1 = this.moons.length;
         this.moons.push(new Moon("New Donk City's Pest Problem", KingdomName.Metro, true));
-        this.moons[lake26].add_prereq_moon(metro1);
+        if (!options.lakeclip) {
+            this.moons[lake26].add_prereq_moon(metro1);
+        }
         this.moons[wooded49].add_prereq_moon(metro1);
         let metro2 = this.moons.length;
         this.moons.push(new Moon("Drummer on Board!", KingdomName.Metro));
@@ -1334,15 +1344,19 @@ export class Moons {
         this.moons.push(new Moon("The Snowy Mountain Barrier", KingdomName.Snow));
         let snow5 = this.moons.length;
         this.moons.push(new Moon("The Bound Bowl Grand Prix", KingdomName.Snow, true));
-        this.moons[snow5].add_prereq_moon(snow1);
-        this.moons[snow5].add_prereq_moon(snow2);
-        this.moons[snow5].add_prereq_moon(snow3);
-        this.moons[snow5].add_prereq_moon(snow4);
+        if (!options.snowclip) {
+            this.moons[snow5].add_prereq_moon(snow1);
+            this.moons[snow5].add_prereq_moon(snow2);
+            this.moons[snow5].add_prereq_moon(snow3);
+            this.moons[snow5].add_prereq_moon(snow4);
+        }
         if (options.worldpeace) {
             kingdoms.kingdom(KingdomName.Snow).set_exit_moon(snow5);
         }
         this.moons[cascade18].add_prereq_moon(snow5);
-        this.moons[lake26].add_prereq_moon(snow5);
+        if (!options.lakeclip) {
+            this.moons[lake26].add_prereq_moon(snow5);
+        }
         this.moons[wooded49].add_prereq_moon(snow5);
         this.moons.push(new Moon("Entrance to Shiveria", KingdomName.Snow));
         this.moons.push(new Moon("Behind Snowy Mountain", KingdomName.Snow));
@@ -1411,8 +1425,10 @@ export class Moons {
         this.moons[snow32].add_prereq_moon(snow5);
         let snow33 = this.moons.length;
         this.moons.push(new Moon("Secret Path to Shiveria", KingdomName.Snow));
-        this.moons[snow33].add_prereq_kingdom(KingdomName.Mushroom);
-        this.moons[snow33].add_prereq_kingdom_count(KingdomName.Snow, 2);
+        if (!options.snowdram) {
+            this.moons[snow33].add_prereq_kingdom(KingdomName.Mushroom);
+            this.moons[snow33].add_prereq_kingdom_count(KingdomName.Snow, 2);
+        }
         let snow35 = this.moons.length;
         this.moons.push(new Moon("Snow Kingdom Regular Cup", KingdomName.Snow));
         this.moons[snow35].add_prereq_kingdom(KingdomName.Mushroom);
@@ -1521,7 +1537,9 @@ export class Moons {
             kingdoms.kingdom(KingdomName.Seaside).set_exit_moon(seaside5);
         }
         this.moons[cascade18].add_prereq_moon(seaside5);
-        this.moons[lake26].add_prereq_moon(seaside5);
+        if (!options.lakeclip) {
+            this.moons[lake26].add_prereq_moon(seaside5);
+        }
         this.moons[wooded49].add_prereq_moon(seaside5);
         this.moons.push(new Moon("On the Cliff Overlooking the Beach", KingdomName.Seaside));
         this.moons.push(new Moon("Ride the Jetstream", KingdomName.Seaside));
