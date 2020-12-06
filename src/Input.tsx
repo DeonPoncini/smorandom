@@ -131,8 +131,10 @@ class Input extends React.Component<InputProps, InputState> {
             break;
         }
         checks.wp = seed.worldpeace(s[0]);
+        let options = this.state.options;
+        options.runtype = rt;
         this.setState({seed: s, seed_string: seed_string, valid_seed: valid,
-            checks: checks});
+            checks: checks, options: options});
     }
 
     updateCheck(rt: RunType, checks: Checks): void {
