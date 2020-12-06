@@ -171,10 +171,7 @@ All the rest are currently unused, will be used if TODOs are implemented
 TODO
 ----
 * Allow saving of current marked off moons
-* Add configuration parameter for backtracking in pre-game
 * Add configuration parameter for leave chance (harded to 10% currently)
 * Add configuration parameter for number of moons before trying to leave in post
 game (currently hard coded to 1)
-* Support Any% without Moon kingdom Moons
 * Support Dark Side without Captain Toad moon
-* Support advanced techniques like IP clip, Lake clip etc
