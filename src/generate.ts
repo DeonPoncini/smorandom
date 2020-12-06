@@ -11,7 +11,6 @@ export function generate(seed: number, options: GenerateOptions): Output {
     let moons = new Moons(kingdoms, options);
     let leave_chance = 1;
     let darkleave = false;
-    let anykeepgoing = false;
 
     // start up the first kingdom
     state.add_kingdom_to_schedule(KingdomName.Cap);
@@ -57,7 +56,7 @@ export function generate(seed: number, options: GenerateOptions): Output {
             scheduled = random.gen_range_int(exit_count, scheduleable-1);
         }
         // for Any% leave after the number of scheduled moons exactly
-        if (options.runtype === RunType.Any && !anykeepgoing) {
+        if (options.runtype === RunType.Any) {
             let tkm = state.total_kingdom_moons;
             let kt = kingdoms.kingdom(state.current_kingdom).moons_to_leave;
             if (tkm + scheduled > kt) {
@@ -65,13 +64,8 @@ export function generate(seed: number, options: GenerateOptions): Output {
             }
         }
         if (scheduled === 0) {
-            if (!state.next_kingdom(kingdoms, options)) {
-                // we need to keep going
-                if (options.runtype === RunType.Any) {
-                    anykeepgoing = true;
-                    continue;
-                }
-            }
+            state.next_kingdom(kingdoms, options);
+
             // schedule the next kingdom
             if (!state.schedule_kingdom()) {
                 // no more moons and no more kingdoms, we are done
@@ -85,7 +79,10 @@ export function generate(seed: number, options: GenerateOptions): Output {
                     }
                 } else {
                     if (state.current_kingdom === KingdomName.Bowser) {
-                        break;
+                        if (state.next_kingdom(kingdoms, options)) {
+                            // we are able to leave the kingdom
+                            break;
+                        }
                     }
                 }
             }

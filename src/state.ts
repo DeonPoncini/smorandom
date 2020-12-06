@@ -230,6 +230,55 @@ class State {
                     this.add_kingdom_to_schedule(k);
                 }
             }
+            if (options.backtrack) {
+                // add all the previous kingdoms
+                switch (this.current_kingdom) {
+                    default: break;
+                    case KingdomName.Sand:
+                        this.add_kingdom_to_schedule(KingdomName.Cascade);
+                        break;
+                    case KingdomName.Lake:
+                    case KingdomName.Wooded:
+                        this.add_kingdom_to_schedule(KingdomName.Cascade);
+                        this.add_kingdom_to_schedule(KingdomName.Sand);
+                        break;
+                    case KingdomName.Cloud:
+                    case KingdomName.Metro:
+                        this.add_kingdom_to_schedule(KingdomName.Cascade);
+                        this.add_kingdom_to_schedule(KingdomName.Sand);
+                        this.add_kingdom_to_schedule(KingdomName.Lake);
+                        this.add_kingdom_to_schedule(KingdomName.Wooded);
+                        break;
+                    case KingdomName.Snow:
+                    case KingdomName.Seaside:
+                        this.add_kingdom_to_schedule(KingdomName.Cascade);
+                        this.add_kingdom_to_schedule(KingdomName.Sand);
+                        this.add_kingdom_to_schedule(KingdomName.Lake);
+                        this.add_kingdom_to_schedule(KingdomName.Wooded);
+                        this.add_kingdom_to_schedule(KingdomName.Metro);
+                        break;
+                    case KingdomName.Luncheon:
+                        this.add_kingdom_to_schedule(KingdomName.Cascade);
+                        this.add_kingdom_to_schedule(KingdomName.Sand);
+                        this.add_kingdom_to_schedule(KingdomName.Lake);
+                        this.add_kingdom_to_schedule(KingdomName.Wooded);
+                        this.add_kingdom_to_schedule(KingdomName.Metro);
+                        this.add_kingdom_to_schedule(KingdomName.Snow);
+                        this.add_kingdom_to_schedule(KingdomName.Seaside);
+                        break;
+                    case KingdomName.Ruined:
+                    case KingdomName.Bowser:
+                        this.add_kingdom_to_schedule(KingdomName.Cascade);
+                        this.add_kingdom_to_schedule(KingdomName.Sand);
+                        this.add_kingdom_to_schedule(KingdomName.Lake);
+                        this.add_kingdom_to_schedule(KingdomName.Wooded);
+                        this.add_kingdom_to_schedule(KingdomName.Metro);
+                        this.add_kingdom_to_schedule(KingdomName.Snow);
+                        this.add_kingdom_to_schedule(KingdomName.Seaside);
+                        this.add_kingdom_to_schedule(KingdomName.Luncheon);
+                        break;
+                }
+            }
         }
         return true;
     }
