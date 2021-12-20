@@ -380,16 +380,15 @@ export class Moons {
         let sand10 = this.moons.length;
         this.moons.push(new Moon("Secret of the Inverted Mural", KingdomName.Sand));
         if (!options.ipclip) {
-            this.moons[sand10].add_prereq_moon(sand2);
+            this.moons[sand10].add_prereq_moon(sand4);
         }
-        this.moons[sand3].add_prereq_moon(sand10);
         this.moons.push(new Moon("On Top of the Stone Archway", KingdomName.Sand));
         this.moons.push(new Moon("From a Crate in the Ruins", KingdomName.Sand));
         this.moons.push(new Moon("On the Lone Pillar", KingdomName.Sand));
         let sand14 = this.moons.length;
         this.moons.push(new Moon("On the Statue's Tail", KingdomName.Sand));
         if (!options.ipclip) {
-            this.moons[sand14].add_prereq_moon(sand2);
+            this.moons[sand14].add_prereq_moon(sand4);
         }
         let sand15 = this.moons.length;
         this.moons.push(new Moon("Hang Your Hat on the Fountain", KingdomName.Sand));
@@ -465,9 +464,8 @@ export class Moons {
         let sand46 = this.moons.length;
         this.moons.push(new Moon("Hidden Room in the Inverted Pyramid", KingdomName.Sand));
         if (!options.ipclip) {
-            this.moons[sand46].add_prereq_moon(sand2);
+            this.moons[sand46].add_prereq_moon(sand4);
         }
-        this.moons[sand3].add_prereq_moon(sand46);
         let sand47 = this.moons.length;
         this.moons.push(new Moon("Underground Treasure Chest", KingdomName.Sand));
         this.moons[sand47].add_prereq_moon(sand3);

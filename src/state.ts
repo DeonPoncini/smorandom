@@ -291,7 +291,10 @@ class State {
             }
         }
 
-        this.moons_to_schedule.push(id);
+        // don't add if its already scheduled
+        if (!this.moons_scheduled.has(id)) {
+            this.moons_to_schedule.push(id);
+        }
     }
 
     schedulable(moons: Moons): number {
