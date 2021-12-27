@@ -238,6 +238,7 @@ class State {
                 switch (this.current_kingdom) {
                     default: break;
                     case KingdomName.Sand:
+                        this.add_kingdom_to_schedule(KingdomName.Cap);
                         this.add_kingdom_to_schedule(KingdomName.Cascade);
                         break;
                     case KingdomName.Lake:
