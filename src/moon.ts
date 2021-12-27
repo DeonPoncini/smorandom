@@ -329,6 +329,7 @@ export class Moons {
         this.moons.push(new Moon("Cascade Kingdom Master Cup", KingdomName.Cascade));
         this.moons[cascade36].add_prereq_kingdom(KingdomName.Mushroom);
         this.moons[cascade36].add_prereq_moon(cascade2);
+        this.moons[cascade36].add_prereq_moon(cascade22);
         let cascade37 = this.moons.length;
         this.moons.push(new Moon("Across the Mysterious Clouds", KingdomName.Cascade));
         this.moons[cascade37].add_prereq_kingdom(KingdomName.Mushroom);
@@ -768,7 +769,7 @@ export class Moons {
         let wooded12 = this.moons.length;
         this.moons.push(new Moon("Over the Cliff's Edge", KingdomName.Wooded));
         this.moons[wooded12].add_prereq_moon(wooded2);
-        this.moons.push(new Moon("The Nut Round the Corner", KingdomName.Wooded));
+        this.moons.push(new Moon("The Nut 'Round the Corner", KingdomName.Wooded));
         this.moons.push(new Moon("Climb the Cliff to Get the Nut", KingdomName.Wooded));
         this.moons.push(new Moon("The Nut in the Red Maze", KingdomName.Wooded));
         this.moons.push(new Moon("The Nut at the Dead End", KingdomName.Wooded));
@@ -1855,7 +1856,7 @@ export class Moons {
         this.moons.push(new Moon("Corner of the Magma Swamp", KingdomName.Luncheon));
         this.moons[luncheon38].add_prereq_moon(luncheon1);
         let luncheon39 = this.moons.length;
-        this.moons.push(new Moon("Magma Narrow Swamp", KingdomName.Luncheon));
+        this.moons.push(new Moon("Magma Narrow Path", KingdomName.Luncheon));
         this.moons[luncheon39].add_prereq_moon(luncheon2);
         let luncheon40 = this.moons.length;
         this.moons.push(new Moon("Crossing to the Magma", KingdomName.Luncheon));
@@ -2056,7 +2057,7 @@ export class Moons {
         this.moons.push(new Moon("Caught Hopping at Bowser's Castle", KingdomName.Bowser));
         this.moons[bowser15].add_prereq_moon(bowser4);
         let bowser16 = this.moons.length;
-        this.moons.push(new Moon("Exterminate the Ogres", KingdomName.Bowser));
+        this.moons.push(new Moon("Exterminate the Ogres!", KingdomName.Bowser));
         this.moons[bowser16].add_prereq_moon(bowser2);
         let bowser17 = this.moons.length;
         this.moons.push(new Moon("Bowser's Kingdom Timer Challenge 1", KingdomName.Bowser));
