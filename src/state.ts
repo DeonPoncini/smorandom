@@ -242,11 +242,13 @@ class State {
                         break;
                     case KingdomName.Lake:
                     case KingdomName.Wooded:
+                        this.add_kingdom_to_schedule(KingdomName.Cap);
                         this.add_kingdom_to_schedule(KingdomName.Cascade);
                         this.add_kingdom_to_schedule(KingdomName.Sand);
                         break;
                     case KingdomName.Cloud:
                     case KingdomName.Metro:
+                        this.add_kingdom_to_schedule(KingdomName.Cap);
                         this.add_kingdom_to_schedule(KingdomName.Cascade);
                         this.add_kingdom_to_schedule(KingdomName.Sand);
                         this.add_kingdom_to_schedule(KingdomName.Lake);
@@ -254,6 +256,7 @@ class State {
                         break;
                     case KingdomName.Snow:
                     case KingdomName.Seaside:
+                        this.add_kingdom_to_schedule(KingdomName.Cap);
                         this.add_kingdom_to_schedule(KingdomName.Cascade);
                         this.add_kingdom_to_schedule(KingdomName.Sand);
                         this.add_kingdom_to_schedule(KingdomName.Lake);
@@ -261,6 +264,7 @@ class State {
                         this.add_kingdom_to_schedule(KingdomName.Metro);
                         break;
                     case KingdomName.Luncheon:
+                        this.add_kingdom_to_schedule(KingdomName.Cap);
                         this.add_kingdom_to_schedule(KingdomName.Cascade);
                         this.add_kingdom_to_schedule(KingdomName.Sand);
                         this.add_kingdom_to_schedule(KingdomName.Lake);
@@ -271,6 +275,7 @@ class State {
                         break;
                     case KingdomName.Ruined:
                     case KingdomName.Bowser:
+                        this.add_kingdom_to_schedule(KingdomName.Cap);
                         this.add_kingdom_to_schedule(KingdomName.Cascade);
                         this.add_kingdom_to_schedule(KingdomName.Sand);
                         this.add_kingdom_to_schedule(KingdomName.Lake);
