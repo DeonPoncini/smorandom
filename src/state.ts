@@ -167,8 +167,11 @@ class State {
                 // mark visited, push to ret queue and insert prereqs
                 if (m !== undefined) {
                     visited.set(m, true);
-                    ret.push(m);
-                    this.exit_moon_chain_set.add(m);
+                    // if it hasn't already been scheduled, add it to the chain
+                    if (!this.moons_scheduled.has(m)) {
+                        ret.push(m);
+                        this.exit_moon_chain_set.add(m);
+                    }
                     for (let mm of moons.moon(m).prerequisite_moons) {
                         q.push(mm);
                     }
