@@ -596,6 +596,7 @@ export class Moons {
         this.moons.push(new Moon("Sinking Colossal Ruins: Hurry!", KingdomName.Sand));
         this.moons[sand87].add_prereq_kingdom(KingdomName.Mushroom);
         this.moons[sand87].add_prereq_moon(sand4);
+        this.moons[sand87].add_prereq_moon(sand86);
         let sand88 = this.moons.length;
         this.moons.push(new Moon("Through the Freezing Waterway", KingdomName.Sand));
         this.moons[sand88].add_prereq_kingdom(KingdomName.Mushroom);
